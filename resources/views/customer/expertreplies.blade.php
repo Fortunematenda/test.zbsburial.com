@@ -160,7 +160,7 @@
     chatBody.scrollTop = chatBody.scrollHeight;
   }, 50); // small delay ensures accurate scroll
 
-  // Reset inpu
+  // Reset input
   input.value = '';
   input.focus();
 },
