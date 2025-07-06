@@ -3,11 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-<<<<<<< HEAD
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Http;
-=======
->>>>>>> c1459f2 (new)
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,15 +21,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-<<<<<<< HEAD
+        // Fix for older MySQL versions and string length
         Schema::defaultStringLength(191);
+
+        // Custom macro to disable SSL verification for HTTP client
         Http::macro('disableSslVerification', function () {
             return Http::withOptions([
-                'verify' => false, // Disable SSL certificate verification
+                'verify' => false,
             ]);
         });
-=======
-        //
->>>>>>> c1459f2 (new)
     }
 }

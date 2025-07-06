@@ -14,8 +14,6 @@ return [
     |
     */
 
-<<<<<<< HEAD
-=======
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
@@ -23,7 +21,6 @@ return [
         'scheme' => 'https',
     ],
 
->>>>>>> c1459f2 (new)
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
@@ -34,7 +31,6 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-<<<<<<< HEAD
     'resend' => [
         'key' => env('RESEND_KEY'),
     ],
@@ -45,11 +41,10 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-    'stripe' => [
-    'key' => env('STRIPE_KEY'),
-    'secret' => env('STRIPE_SECRET'),
-],
 
-=======
->>>>>>> c1459f2 (new)
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+    ],
+
 ];

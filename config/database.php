@@ -10,33 +10,18 @@ return [
     |--------------------------------------------------------------------------
     |
     | Here you may specify which of the database connections below you wish
-<<<<<<< HEAD
-    | to use as your default connection for database operations. This is
-    | the connection which will be utilized unless another connection
-    | is explicitly specified when you execute a query / statement.
-    |
-    */
-
-    'default' => env('DB_CONNECTION', 'sqlite'),
-=======
     | to use as your default connection for all database work. Of course
     | you may use many connections at once using the Database library.
     |
     */
 
     'default' => env('DB_CONNECTION', 'mysql'),
->>>>>>> c1459f2 (new)
 
     /*
     |--------------------------------------------------------------------------
     | Database Connections
     |--------------------------------------------------------------------------
     |
-<<<<<<< HEAD
-    | Below are all of the database connections defined for your application.
-    | An example configuration is provided for each database system which
-    | is supported by Laravel. You're free to add / remove connections.
-=======
     | Here are each of the database connections setup for your application.
     | Of course, examples of configuring each database platform that is
     | supported by Laravel is shown below to make development simple.
@@ -45,7 +30,6 @@ return [
     | All database work in Laravel is done through the PHP PDO facilities
     | so make sure you have the driver for your particular database of
     | choice installed on your machine before you begin development.
->>>>>>> c1459f2 (new)
     |
     */
 
@@ -53,34 +37,23 @@ return [
 
         'sqlite' => [
             'driver' => 'sqlite',
-<<<<<<< HEAD
-            'url' => env('DB_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => '',
-            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-            'busy_timeout' => null,
-            'journal_mode' => null,
-            'synchronous' => null,
-=======
             'url' => env('DATABASE_URL'),
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
->>>>>>> c1459f2 (new)
         ],
 
         'mysql' => [
             'driver' => 'mysql',
-<<<<<<< HEAD
-            'url' => env('DB_URL'),
+            'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'laravel'),
-            'username' => env('DB_USERNAME', 'root'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => env('DB_CHARSET', 'utf8mb4'),
-            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
@@ -92,16 +65,6 @@ return [
 
         'mariadb' => [
             'driver' => 'mariadb',
-            'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'laravel'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => env('DB_CHARSET', 'utf8mb4'),
-            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
-=======
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
@@ -111,7 +74,6 @@ return [
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
->>>>>>> c1459f2 (new)
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
@@ -123,15 +85,6 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-<<<<<<< HEAD
-            'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'laravel'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => env('DB_CHARSET', 'utf8'),
-=======
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '5432'),
@@ -139,7 +92,6 @@ return [
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
->>>>>>> c1459f2 (new)
             'prefix' => '',
             'prefix_indexes' => true,
             'search_path' => 'public',
@@ -148,15 +100,6 @@ return [
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-<<<<<<< HEAD
-            'url' => env('DB_URL'),
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'laravel'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => env('DB_CHARSET', 'utf8'),
-=======
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '1433'),
@@ -164,7 +107,6 @@ return [
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
->>>>>>> c1459f2 (new)
             'prefix' => '',
             'prefix_indexes' => true,
             // 'encrypt' => env('DB_ENCRYPT', 'yes'),
@@ -178,24 +120,11 @@ return [
     | Migration Repository Table
     |--------------------------------------------------------------------------
     |
-    | This table keeps track of all the migrations that have already run for
-    | your application. Using this information, we can determine which of
-<<<<<<< HEAD
-    | the migrations on disk haven't actually been run on the database.
-    |
-    */
-
-    'migrations' => [
-        'table' => 'migrations',
-        'update_date_on_publish' => true,
-    ],
-=======
-    | the migrations on disk haven't actually been run in the database.
+    | This table keeps track of all the migrations that have already run in the database.
     |
     */
 
     'migrations' => 'migrations',
->>>>>>> c1459f2 (new)
 
     /*
     |--------------------------------------------------------------------------
@@ -203,12 +132,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | Redis is an open source, fast, and advanced key-value store that also
-    | provides a richer body of commands than a typical key-value system
-<<<<<<< HEAD
-    | such as Memcached. You may define your connection settings here.
-=======
-    | such as APC or Memcached. Laravel makes it easy to dig right in.
->>>>>>> c1459f2 (new)
+    | provides a richer body of commands than a typical key-value system such as APC or Memcached.
+    | Laravel makes it easy to dig right in.
     |
     */
 
