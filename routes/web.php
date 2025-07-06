@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< HEAD
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -124,3 +125,21 @@ Route::middleware(['auth:sanctum', \App\Http\Middleware\Roles::class . ':Expert'
 
 // Load authentication routes
 require __DIR__.'/auth.php';
+=======
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+>>>>>>> c1459f2 (new)
