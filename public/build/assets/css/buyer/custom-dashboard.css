@@ -1,0 +1,103 @@
+:root {
+  --purple: rgb(176, 45, 241);
+  --purple-light: rgb(168, 93, 203);
+  --alert-danger-bg: #db0b29;
+  --alert-danger-border: #fff;
+  --alert-danger-text: #fff;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+.cHKndY {
+  flex: 1 1 0% !important;
+  text-align: center !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  box-shadow: none !important;
+  margin-bottom: 16px !important;
+  color: var(--purple) !important;
+  margin-top: 16px !important;
+}
+
+.marquee-wrapper {
+    background-color: #f8f9fa;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+.marquee {
+    display: inline-block;
+    animation: marquee 40s linear infinite;
+    font-size: 20px;
+    padding: 10px 0;
+    color: purple;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.Button_bgLightBlue__0RMHv {
+  border-color: var(--purple-light) !important;
+}
+
+.Button_textBlue__796NH {
+  color: var(--purple) !important;
+}
+
+.account-settings-multiselect ~ .select2-container {
+  width: 100% !important;
+}
+
+.alert-danger {
+  color: var(--alert-danger-text);
+  background-color: var(--alert-danger-bg);
+  border-color: var(--alert-danger-border);
+}
+
+select,
+select option,
+.select2-container--default .select2-selection--single {
+  color: black !important;
+}
+
+/* Fix the height and overflow of the Select2 multiple selection box */
+.select2-container--default .select2-selection--multiple {
+  min-height: 38px; /* or auto if you want it to expand */
+  overflow-y: auto;
+  max-height: 100px; /* limit height and allow scrolling */
+  white-space: normal;
+}
+
+/* Allow wrapping of selected items */
+.select2-selection__rendered {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+}
+
+/* Ensure UIkit modal is on top */
+.uk-modal.uk-open {
+  z-index: 10000 !important;
+}
+.cHKndY {
+    flex: 1 1 0% !important;
+    text-align: center !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
+    box-shadow: none !important;
+    margin-bottom: 16px !important;
+    color: purple !important;
+    margin-top: 16px !important;
+}

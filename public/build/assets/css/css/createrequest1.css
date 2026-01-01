@@ -1,0 +1,357 @@
+
+   
+
+        .container-home {
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 68px !important;
+            font-weight: 700 !important;
+            color:rgb(255, 255, 255) !important;
+            margin-bottom: 10px !important; 
+        }
+
+        
+
+      
+
+
+        .popular {
+            font-size: 0.9rem;
+            color: #1e1e1e;
+        }
+
+
+
+.container3 {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 2rem;
+    padding-left: 2rem;
+}
+input {
+  padding: 10px;
+  width: 100%;
+  font-size: 17px;
+  font-family: Raleway;
+  border: 1px solid purple;
+}
+
+/* Mark input boxes that gets an error on validation: */
+input.invalid {
+  background-color: #ffdddd;
+}
+
+/* Hide all steps by default: */
+.tab {
+  display: none;
+}
+
+button {
+  background-color: #04AA6D;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 17px;
+  font-family: Raleway;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+#prevBtn {
+  background-color: #bbbbbb;
+}
+
+
+/* Make circles that indicate the steps of the form: */
+.step {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: purple;
+  border: none;  
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+.step.active {
+  opacity: 0.8;
+}
+
+/* Mark the steps that are finished and valid: */
+.step.finish {
+  background-color: purple;
+}
+.uk-button-primary{
+    background-color:purple !important;
+}
+.hsd{
+    font-weight:bolder !important;
+    font-size:24px !important;
+    color:purple !important;
+}
+.hsd1{
+    font-size: 20px !important;
+}
+input[type=email], input[type=email], input[type=tel], input[type=text]{
+    border:1px solid lightgray;
+}
+label {
+    display: block !important;
+}
+.iti{
+    display: block !important;
+}
+.drop-area {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        border: 2px dashed #a569bd;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        color: #555;
+        font-size: 18px;
+    }
+    .preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #e3c5e3;
+    }
+    .preview-image {
+        border-radius: 5px;
+    }
+    .error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+.search-box {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  height: 60px;
+  border-radius: 120px;
+  margin: 0 auto;
+}
+
+.border {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 5;
+  stroke-miterlimit: 10;
+}
+.border {
+  stroke-dasharray: 740;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 400ms cubic-bezier(0.600, 0.040, 0.735, 0.990);
+  -webkit-transition: stroke-dashoffset 400ms cubic-bezier(0.600, 0.040, 0.735, 0.990);
+  -moz-transition: stroke-dashoffset 400ms cubic-bezier(0.600, 0.040, 0.735, 0.990);
+  -o-transition: stroke-dashoffset 400ms cubic-bezier(0.600, 0.040, 0.735, 0.990);
+}
+.border-searching .border {
+  stroke-dasharray: 740;
+  stroke-dashoffset: 459;
+  transition: stroke-dashoffset 650ms cubic-bezier(0.755, 0.150, 0.205, 1.000);
+  -webkit-transition: stroke-dashoffset 650ms cubic-bezier(0.755, 0.150, 0.205, 1.000);
+  -moz-transition: stroke-dashoffset 650ms cubic-bezier(0.755, 0.150, 0.205, 1.000);
+  -o-transition: stroke-dashoffset 650ms cubic-bezier(0.755, 0.150, 0.205, 1.000);
+}
+
+.border1 {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 5;
+  stroke-miterlimit: 10;
+}
+.border1 {
+  stroke-dasharray: 740;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 400ms cubic-bezier(0.600, 0.040, 0.735, 0.990);
+  -webkit-transition: stroke-dashoffset 400ms cubic-bezier(0.600, 0.040, 0.735, 0.990);
+  -moz-transition: stroke-dashoffset 400ms cubic-bezier(0.600, 0.040, 0.735, 0.990);
+  -o-transition: stroke-dashoffset 400ms cubic-bezier(0.600, 0.040, 0.735, 0.990);
+}
+.border-searching1 .border1 {
+  stroke-dasharray: 740;
+  stroke-dashoffset: 459;
+  transition: stroke-dashoffset 650ms cubic-bezier(0.755, 0.150, 0.205, 1.000);
+  -webkit-transition: stroke-dashoffset 650ms cubic-bezier(0.755, 0.150, 0.205, 1.000);
+  -moz-transition: stroke-dashoffset 650ms cubic-bezier(0.755, 0.150, 0.205, 1.000);
+  -o-transition: stroke-dashoffset 650ms cubic-bezier(0.755, 0.150, 0.205, 1.000);
+}
+#serviceTxt {
+  font-family: 'Montserrat Alternates', sans-serif;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 120px;
+  border: none;
+  background: rgba(255,255,255,0);
+  padding: 0 30px 0 50px;
+  color: #FFFFFF;
+  font-size: 1.32em;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  outline: none;
+}
+#serviceTxt::-webkit-input-placeholder {color: #FFFFFF;}
+#serviceTxt::-moz-placeholder {color: #FFFFFF;}
+#serviceTxt:-ms-input-placeholder {color: #FFFFFF;}
+#serviceTxt:-moz-placeholder {color: #FFFFFF;}
+#serviceTxt::-moz-selection {color: #FFFFFF; background: rgba(0,0,0,0.25);}
+#serviceTxt::selection {color: #FFFFFF; background: rgba(0,0,0,0.25);}
+
+#searchLocation {
+  font-family: 'Montserrat Alternates', sans-serif;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 120px;
+  border: none;
+  background: rgba(255,255,255,0);
+  padding: 0 30px 0 50px;
+  color: #FFFFFF;
+  font-size: 1.32em;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  outline: none;
+}
+#searchLocation::-webkit-input-placeholder {color: #FFFFFF;}
+#searchLocation::-moz-placeholder {color: #FFFFFF;}
+#searchLocation:-ms-input-placeholder {color: #FFFFFF;}
+#searchLocation:-moz-placeholder {color: #FFFFFF;}
+#searchLocation::-moz-selection {color: #FFFFFF; background: rgba(0,0,0,0.25);}
+#searchLocation::selection {color: #FFFFFF; background: rgba(0,0,0,0.25);}
+
+.text-white {
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.py-\[72px\] {
+    padding-top: 72px;
+    padding-bottom: 72px;
+}
+.bg-\[linear-gradient\(to_bottom\2c \#000\2c \#200D42_34\%\2c \#4F21A1_65\%\2c \#A46EDB_82\%\)\] {
+    background-image: linear-gradient(180deg, #000, #200d42 34%, #4f21a1 65%, #a46edb 82%);
+}
+.bg-black {
+    --tw-bg-opacity: 1;
+    background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+.overflow-clip {
+    overflow: clip;
+}
+.relative {
+    position: relative;
+}
+.text-white\/70 {
+    color: hsla(0, 0%, 100%, .7);
+}
+.text-xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    font-weight: 300;
+}
+
+.min-h-screen{min-height:0vh !important} 
+.text-center {
+    text-align: center;
+}
+
+element.style {
+    will-change: transform;
+    transform: translateX(-45.1567%);
+}
+
+.search-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #4f21a1;
+    border: none;
+    border-radius: 20px;
+    font-size: 22px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 500;
+}
+
+.search-btn i {
+  margin-right: 8px; /* Space between the icon and text */
+}
+
+.search-btn:hover {
+  background-color: #4f21a1; /* Lighter purple on hover */
+  color: white;
+}
+
+.search-btn:focus {
+  outline: none;
+}
+
+.search-btn:active {
+  background-color: #4a148c; /* Darker purple when clicked */
+}
+
+@media screen and (min-width: 1500px) {
+  #inner-service {   
+    width: 20% !important;
+}
+
+}
+@media screen and (min-width: 768px) and (max-width: 1500px) {
+  #inner-service {   
+    width: 30% !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .search-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  #inner-service {   
+    width: 95% !important;
+}
+  .btn-main{
+    width: 100%;
+  }
+  h1{
+    font-size: 50px;
+    text-align: center; 
+  }
+}
+.txtclas{
+  font-size: 24px;
+            font-weight: bold;;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 25ch;
+            text-align: center;
+            min-height: 1.2em;
+}
+#text{
+  min-height: 1.2em;
+}
+

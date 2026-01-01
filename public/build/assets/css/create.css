@@ -1,0 +1,472 @@
+.container1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+  background: linear-gradient(to right, #a7bdd1, #d3d3d3);
+
+}
+#heading {
+    text-transform: uppercase;
+    color: purple;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+#msform {
+    text-align: center;
+    position: relative;
+    margin-top: 20px
+}
+ /* General container styling */
+ .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .radio-label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: purple;
+  }
+
+  
+  /* Radio button container */
+  .options-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* Hide the default radio button */
+  .options-container>input[type="radio"] {
+    display: none;
+  }
+
+  /* Styling the label which acts as the visible radio button */
+  .options-container>label {
+    padding: 10px 20px;
+    border: 2px solid #E0E0E0;
+    border-radius: 25px;
+    background-color: white;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: all 0.3s ease;
+  }
+
+  /* Selected radio button style */
+  input[type="radio"]:checked + label {
+    background-color: #E5F1FF;
+    border-color: purple;
+    color: purple;
+  }
+
+  /* Hover effect */
+  .options-container>label:hover {
+    background-color: #f0f0f0;
+  }
+#msform fieldset {
+    background: white;
+    border: 0 none;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding-bottom: 20px;
+    position: relative
+}
+
+.form-card {
+    text-align: left
+}
+
+#msform fieldset:not(:first-of-type) {
+    display: none
+}
+
+#msform input[type="text"],
+#msform textarea {
+    padding: 8px 15px 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: .375rem;
+    margin-bottom: 25px;
+    margin-top: 2px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: montserrat;
+    color: #2C3E50;
+    font-size: 16px;
+    letter-spacing: 1px
+}
+
+#msform input[type="text"]:focus,
+#msform textarea:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 1px solid purple;
+    outline-width: 0
+}
+
+#msform .action-button {
+    width: 100px;
+    background: purple;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 0px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 0px 10px 5px;
+    float: right
+}
+
+#msform .action-button:hover,
+#msform .action-button:focus {
+    background-color: #311B92
+}
+
+#msform .action-button-previous {
+    width: 100px;
+    background: #616161;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 0px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px 10px 0px;
+    float: right
+}
+
+#msform .action-button-previous:hover,
+#msform .action-button-previous:focus {
+    background-color: #000000
+}
+
+.card {
+    z-index: 0;
+    border: none;
+    position: relative
+}
+
+.fs-title {
+    font-size: 18px;
+    color: purple;
+    margin-bottom: 15px;
+    font-weight: normal;
+    text-align: left
+}
+
+.purple-text {
+    color: purple;
+    font-weight: normal
+}
+
+.steps {
+    font-size: 25px;
+    color: gray;
+    margin-bottom: 10px;
+    font-weight: normal;
+    text-align: right
+}
+
+.fieldlabels {
+    color: purple;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+   
+}
+
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: lightgrey
+}
+
+#progressbar .active {
+    color: purple;
+}
+
+#progressbar li {
+    list-style-type: none;
+    font-size: 15px;
+    width: 25%;
+    float: left;
+    position: relative;
+    font-weight: 400
+}
+
+#progressbar #account:before {
+    font-family: FontAwesome;
+    content: "\f041"
+}
+
+#progressbar #personal:before {
+    font-family: FontAwesome;
+    content: "\f007"
+}
+
+#progressbar #lock:before {
+    font-family: FontAwesome;
+    content: "\f023"
+}
+
+#progressbar #confirm:before {
+    font-family: FontAwesome;
+    content: "\f00c"
+}
+
+#progressbar li:before {
+    width: 50px;
+    height: 50px;
+    line-height: 45px;
+    display: block;
+    font-size: 20px;
+    color: #ffffff;
+    background: lightgray;
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    padding: 2px
+}
+
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: lightgray;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    z-index: -1
+}
+
+#progressbar li.active:before,
+#progressbar li.active:after {
+    background: purple;
+}
+
+.progress {
+    height: 20px
+}
+
+.progress-bar {
+    background-color: purple
+}
+
+.fit-image {
+    width: 100%;
+    object-fit: cover
+}
+/* Left column (Text and Button) */
+.left-column {
+    padding-right: 20px;
+}
+
+.left-column h1 {
+    font-size: 4em;
+    color: #5f0969;
+    padding-right: 10px;
+}
+p {
+    font-size: 18px ;
+    color: #5f0969  ;
+    margin-bottom: 20px !important;
+}
+
+.left-column p {
+    font-size: 1.5em;
+    margin: 20px 0;
+    color: #531457;
+}
+
+.left-column input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.left-column button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    background-color: #741a93;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* Right column (Image) */
+.right-column {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+.right-column img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* Services Section */
+.search-services {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.services-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.services-list li {
+    margin: 10px 0;
+    font-size: 1.2em;
+}
+
+/* Popular Services */
+.popular-services {
+    display: flex;
+    justify-content: space-around;
+    margin: 50px 0;
+  
+      
+}
+
+.service-item {
+    text-align: center;
+    width: 150px;
+    
+}
+
+.service-item img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+
+}
+
+.service-item p {
+    font-size: 1.1em;
+    margin-top: 10px;
+    
+}
+
+.service-item .rating {
+    margin-top: 5px;
+    color: #ffcc00;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container1 {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .left-column, .right-column {
+        width: 100%;
+    }
+
+    .left-column {
+        padding-right: 0;
+    }
+
+    .popular-services {
+        flex-direction: column;
+    }
+}
+#inner-service li {
+    background: white !important;   
+    z-index: 3 !important;
+    position: relative !important;
+    padding: 10px 10px 10px 20px !important;
+    cursor: pointer !important;
+    font-family: 'Montserrat', Helvetica, Arial, Lucida, sans-serif !important;
+    font-size: 18px !important;
+    text-align: left !important;
+    border-top: 1px solid #e6e6e6 !important;
+    color: #4f21a1 !important;
+    line-height: 30px !important;
+ 
+}
+
+#inner-service {
+    float: left;
+    list-style: none;
+    width: 50%;
+    z-index: 3;
+    padding: 2px;
+    position: absolute;  
+    border: #4f21a1 1px solid;
+    height: 250px;
+    overflow-y: auto;
+    background-color: #ededed;
+    border-radius: 20px;
+}
+
+
+#search-service{
+    font-family: 'Montserrat',Helvetica,Arial,Lucida,sans-serif;
+    font-weight: 300;
+    line-height: 1.6em;
+    z-index: 100;    
+display: none;
+
+}
+#search-service li::before {
+    content: '\2713'; /* Unicode for the checkmark */
+    font-size: 16px;
+    color: white;
+    background-color: #4f21a1;
+    border-radius: 50%;
+    padding: 6px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 20px;
+    left: 0;
+    top: 0;
+    margin-right: 10px;
+    display: inline-block;
+}
+.sub-text{
+    font-weight: 600 !important;
+    
+}
+.myrow{
+    margin-top: 15px;
+}
+.col-12{
+    margin-top: 11px;
+}
+
+.binfo:before {
+    font-family: FontAwesome;
+    content: "\f05a";
+    color: #d3d3d3;
+}
+.binfo{
+    color: #a7a1a1;
+    font-size: 13px;
+}
+.mrgin{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.uk-modal{
+    z-index: 2000 !important;
+}
+

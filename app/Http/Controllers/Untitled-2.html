@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Infinite Scroll Leads</title>
+    <!-- Include jQuery (optional, for simplicity) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Basic styles for leads */
+        .lead {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        /* Loader styles */
+        #loader {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* End message */
+        #end-message {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div id="leads-container">
+        <!-- Leads will be appended here -->
+    </div>
+
+    <div id="loader">
+        <img src="path_to_loader.gif" alt="Loading..." />
+    </div>
+
+    <div id="end-message">
+        No more leads to display.
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            let page = 1;
+            let isLoading = false;
+            let lastPage = false;
+
+            // Function to fetch leads
+            function fetchLeads(page) {
+                if (isLoading || lastPage) return;
+
+                isLoading = true;
+                $('#loader').show();
+
+                $.ajax({
+                    url: '/api/leads', // Adjust the URL if necessary
+                    type: 'GET',
+                    data: { page: page },
+                    headers: {
+                        'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Replace with actual token
+                        'Accept': 'application/json'
+                    },
+                    success: function(response) {
+                        // Append leads to container
+                        response.data.forEach(function(lead) {
+                            $('#leads-container').append(`
+                                <div class="lead">
+                                    <h3>${lead.service_name}</h3>
+                                    <p><strong>Lead ID:</strong> ${lead.id}</p>
+                                    <p><strong>Description:</strong> ${lead.description}</p>
+                                    <p><strong>Distance:</strong> ${lead.distance.toFixed(2)} km</p>
+                                    <!-- Add more fields as needed -->
+                                </div>
+                            `);
+                        });
+
+                        // Update pagination variables
+                        if (response.current_page >= response.last_page) {
+                            lastPage = true;
+                            $('#end-message').show();
+                        } else {
+                            page++;
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error fetching leads:', xhr);
+                    },
+                    complete: function() {
+                        isLoading = false;
+                        $('#loader').hide();
+                    }
+                });
+            }
+
+            // Initial fetch
+            fetchLeads(page);
+
+            // Infinite scroll handler
+            $(window).scroll(function() {
+                if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+                    fetchLeads(page);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

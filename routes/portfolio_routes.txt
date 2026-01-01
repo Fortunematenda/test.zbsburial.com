@@ -1,0 +1,120 @@
+/*
+||--------------------------------------------------------------------------
+|| PORTFOLIO MANAGEMENT (mobile)
+||--------------------------------------------------------------------------
+*/
+Route::get('/user/portfolio', function (Request $request) {
+    try {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
+        // Get user's portfolio images
+        $portfolio = \App\Models\PortfolioModel::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $portfolio
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to load portfolio: ' . $e->getMessage()
+        ], 500);
+    }
+})->middleware('auth:sanctum');
+
+Route::post('/user/portfolio', function (Request $request) {
+    try {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+        ]);
+
+        // Store uploaded image
+        $imagePath = $request->file('image')->store('portfolio', 'public');
+
+        // Create portfolio entry
+        $portfolioItem = \App\Models\PortfolioModel::create([
+            'user_id' => $user->id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'image_url' => 'storage/' . $imagePath,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Image added to portfolio successfully',
+            'data' => $portfolioItem
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Validation failed',
+            'errors' => $e->errors()
+        ], 422);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to add to portfolio: ' . $e->getMessage()
+        ], 500);
+    }
+})->middleware('auth:sanctum');
+
+Route::delete('/user/portfolio/{id}', function (Request $request, $id) {
+    try {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
+        // Find portfolio item
+        $portfolioItem = \App\Models\PortfolioModel::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$portfolioItem) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Portfolio item not found'
+            ], 404);
+        }
+
+        // Delete image from storage
+        if ($portfolioItem->image_url) {
+            Storage::disk('public')->delete($portfolioItem->image_url);
+        }
+
+        // Delete portfolio item
+        $portfolioItem->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Portfolio item deleted successfully'
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to delete portfolio item: ' . $e->getMessage()
+        ], 500);
+    }
+})->middleware('auth:sanctum');
+

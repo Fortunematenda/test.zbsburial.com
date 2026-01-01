@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "701202336945",
+    "project_id": "fortai-7d627",
+    "storage_bucket": "fortai-7d627.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701202336945:android:787548d1de86164643a690",
+        "android_client_info": {
+          "package_name": "com.fortaiandroid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwGgKI26k5xuzfnDetJdDb1caDG1z1vys"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

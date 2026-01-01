@@ -1,0 +1,52 @@
+====================================
+HOW TO RUN THE BUILD SCRIPT
+====================================
+
+If BUILD_COMMANDS.bat closes immediately, try these solutions:
+
+SOLUTION 1: Use the wrapper script (RECOMMENDED)
+-------------------------------------------------
+Double-click: RUN_BUILD.bat
+This will keep the window open even if there are errors.
+
+SOLUTION 2: Run from Command Prompt
+-----------------------------------
+1. Open Command Prompt (cmd.exe)
+2. Navigate to the mobile-app folder:
+   cd C:\wamp64\www\fortai\mobile-app
+3. Run the script:
+   BUILD_COMMANDS.bat
+The window will stay open so you can see errors.
+
+SOLUTION 3: Debug the issue
+----------------------------
+1. Double-click: DEBUG_BUILD.bat
+2. This will test your environment and show what's wrong
+3. Fix any issues it finds, then try BUILD_COMMANDS.bat again
+
+SOLUTION 4: Test your environment
+----------------------------------
+1. Double-click: TEST_BUILD.bat
+2. This checks if Node.js, npm, and EAS CLI are installed
+3. Fix any missing dependencies before running the build
+
+COMMON ISSUES:
+--------------
+1. Node.js not installed or not in PATH
+   - Install from: https://nodejs.org/
+   - Make sure to check "Add to PATH" during installation
+
+2. Not logged into Expo
+   - Run: eas login
+   - Then try the build again
+
+3. Wrong directory
+   - Make sure you're in: C:\wamp64\www\fortai\mobile-app
+   - Or run from project root: C:\wamp64\www\fortai
+
+4. Script closes immediately
+   - Use RUN_BUILD.bat instead (keeps window open)
+   - Or run from Command Prompt to see errors
+
+====================================
+

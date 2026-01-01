@@ -1,0 +1,97 @@
+{
+  "expo": {
+    "name": "Fortai",
+    "slug": "fortai",
+    "version": "1.0.0",
+    "scheme": "fortai",
+    "extra": {
+      "apiUrl": "https://test.zbsburial.com/api",
+      "eas": {
+        "projectId": "a93c0cff-ffe2-40ad-8eda-17f6f9752243"
+      }
+    },
+    "orientation": "portrait",
+    "icon": "./assets/fortailogoicon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/fortailogoicon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "assets/**/*.png",
+      "assets/**/*.jpg",
+      "assets/**/*.jpeg",
+      "assets/**/*.gif",
+      "assets/**/*.svg",
+      "assets/**/*.webp",
+      "assets/**/*.ico"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.fortai.mobileapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/fortailogoicon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.fortai.mobileapp",
+      "softwareKeyboardLayoutMode": "resize",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.CAMERA"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-notifications",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them.",
+          "cameraPermission": "The app accesses your camera to take photos."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Fortai to use your location to find nearby service providers."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Fortai to access your camera to take photos for service requests."
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34,
+            "minSdkVersion": 23
+          }
+        }
+      ],
+      "expo-font",
+      "expo-secure-store",
+      "expo-asset",
+      "expo-router",
+      "expo-web-browser"
+    ],
+    "notification": {
+      "icon": "./assets/fortailogoicon.png",
+      "color": "#ffffff"
+    }
+  }
+}

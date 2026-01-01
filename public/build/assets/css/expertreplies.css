@@ -1,0 +1,521 @@
+/* ---------------- HEADER SECTION ---------------- */
+header {
+  padding: 10px 15px;
+}
+h1 {
+  color: #1877f2;
+  display: inline-block;
+  margin: 0;
+}
+.search-bar {
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+}
+
+
+/* ---------------- CHAT LIST ---------------- */
+.chats {
+  padding: 20px;
+  overflow-y: auto;
+   height: 500px;
+  background: #fff;
+}
+.chat {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.chat:hover {
+  background: #eaeaea;
+}
+.chat-avatar, .chat-header-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+}
+.chat-info {
+  flex-grow: 1;
+}
+.chat-info p {
+  font-size: 14px;
+  color: #888;
+  margin: 2px 0 0 0;
+}
+
+
+/* ---------------- CHAT SCREEN ---------------- */
+#chat-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f0f2f5;
+  width: 100%;
+  z-index: 100;
+}
+.chat-header {
+  display: flex;
+  align-items: center;
+  height: 80px;
+  gap: 10px;
+  background: #fff;
+  color: #393939;
+  padding: 0 15px;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+.chat-header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.back-button  {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: purple;
+  cursor: pointer;
+}
+
+.chat-header h2,
+.chat-header p {
+  margin: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+
+/* ---------------- CHAT BODY ---------------- */
+.chatBody {
+  flex: 1 1 auto;
+  overflow-y: scroll;
+  padding: 20px;
+  background-color: #f0f2f5;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 80px;
+  height: 450px;
+}
+
+
+/* ---------------- MESSAGES ---------------- */
+.message {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 15px;
+}
+.message.user {
+  justify-content: flex-end;
+}
+.message.bot {
+  justify-content: flex-start;
+}
+.message .avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 0 10px;
+}
+.message div {
+  max-width: 80%;
+  background-color: #fff;
+  padding: 10px 15px;
+  border-radius: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.message.user div {
+  background-color: #dcf8c6;
+}
+.timestamp {
+  display: block;
+  font-size: 0.75em;
+  color: #666;
+  text-align: right;
+  margin-top: 5px;
+}
+
+
+/* ---------------- DATE DIVIDER ---------------- */
+.date-divider {
+  text-align: center;
+  margin: 20px 0 10px;
+  position: relative;
+}
+.date-divider span {
+  background: #e2e3e5;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #333;
+}
+
+
+/* ---------------- CHAT INPUT ---------------- */
+.chat-input {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  gap: 10px;
+  box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.06);
+  border-top: 1px solid #ddd;
+  z-index: 101;
+}
+.chat-input input[type="text"] {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  font-size: 15px;
+}
+#send-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.no-experts-message {
+    text-align: center;
+    margin-top: 20px;
+    color: #666;
+}
+.chat-input input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
+}
+.chat-input button {
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.chat-input button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+.chat-input button:disabled {
+  background-color: #bbb;
+  cursor: not-allowed;
+}
+
+.service-info {
+    margin: 0;
+    font-size: 18px;
+    color: #888;
+}
+
+/* ---------------- IMAGE MODAL ---------------- */
+.modal {
+  z-index: 100000 !important;
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+}
+.modal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+}
+.modal .close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white !important;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+
+/* ---------------- MODAL (UK) ---------------- */
+#modal-overflow {
+  z-index: 10000 !important;
+}
+
+
+/* ---------------- CARD PROFILE ---------------- */
+.card {
+  width: 350px;
+  background-color: #efefef;
+  border: none;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+.card:hover .image img {
+  transform: scale(1.5);
+}
+.image img {
+  transition: all 0.5s;
+}
+.btn {
+  height: 140px;
+  width: 140px;
+  border-radius: 50%;
+}
+.name {
+  font-size: 22px;
+  font-weight: bold;
+}
+.idd, .idd1 {
+  font-size: 14px;
+}
+.idd1 {
+  font-size: 12px;
+}
+.number {
+  font-size: 22px;
+  font-weight: bold;
+}
+.follow {
+  font-size: 12px;
+  font-weight: 500;
+  color: #444;
+}
+.btn1 {
+  height: 40px;
+  width: 150px;
+  border: none;
+  background-color: #000;
+  color: #aeaeae;
+  font-size: 15px;
+}
+.text span {
+  font-size: 13px;
+  color: #545454;
+  font-weight: 500;
+}
+.icons i {
+  font-size: 19px;
+}
+hr.new1 {
+  border: 1px solid;
+}
+.join {
+  font-size: 14px;
+  color: #a0a0a0;
+  font-weight: bold;
+}
+
+
+/* ---------------- MARQUEE ---------------- */
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  padding: 10px 0;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+.marquee-content {
+  display: inline-flex;
+  animation: scroll 15s linear infinite;
+}
+.marquee-content img {
+  height: 200px;
+  margin: 0 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.marquee-content img:hover {
+  transform: scale(1.1);
+}
+@keyframes scroll {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+
+/* ---------------- PROFILE COMPONENT ---------------- */
+.profile-container {
+  max-width: 800px;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+.header {
+    text-align: center;
+    padding: 20px;
+    color: white;
+    font-size: 16px;
+}
+
+.header img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto;
+}
+.header h1 {
+  margin: 10px 0 5px;
+  font-size: 1.5em;
+}
+.header p {
+  margin: 5px 0;
+}
+.content {
+  padding: 20px;
+}
+.content h3 {
+  border-bottom: 2px solid #850385ab;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+ font-size: 16px !important;
+}
+.info-list {
+  list-style: none;
+  padding: 0;
+}
+.info-list li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+ font-size: 14px !important;
+}
+.info-list li span {
+  font-weight: bold;
+  font-size: 14px !important;
+}
+.skills ul, .social ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+ font-size: 14px !important;
+}
+.skills li, .social li {
+  padding: 8px 12px;
+  background: #850385ab;
+  color: white;
+  border-radius: 5px;
+ font-size: 14px !important;
+}
+.social li a {
+  color: white;
+  text-decoration: none;
+ font-size: 14px !important;
+}
+
+
+/* ---------------- REVIEWS ---------------- */
+.profile-reviews {
+  padding: 5px 10px;
+  border-top: 1px solid #eaeaea;
+ font-size: 12px !important;
+}
+.review {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  font-size: 12px !important;
+}
+.review h4 {
+  margin: 0;
+  color: #6c63ff;
+  font-size: 12px;
+}
+.review p {
+  color: #555;
+  font-size: 12px;
+}
+.review .rating {
+  color: #ffcc00;
+  font-size: 12px;
+}
+
+
+/* ---------------- FOOTER ---------------- */
+.profile-footer {
+  text-align: center;
+  background-color: #f4f4f4;
+  padding: 10px;
+  font-size: 14px;
+  color: #666;
+}
+.cursor-pointer {
+    cursor: pointer;
+    font-size: 16px;
+    color: #d1d5db;
+    transition: color 0.2s ease;
+}
+
+.cursor-pointer:hover {
+    color: #facc15;
+}
+
+
+/* ---------------- MEDIA QUERIES ---------------- */
+@media (max-width: 600px) {
+  .chat-info strong {
+    font-size: 14px;
+  }
+  .chat-info p {
+    font-size: 12px;
+  }
+  .chat-input input {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+  .chat-input button {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  .chatBody {
+    padding: 10px;
+  }
+  .message div {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  .date-divider span {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+}
+@media (min-height: 768px) {
+  .toggle-chat-list {
+    display: block;
+  }
+}
+@media (max-width: 768px) {
+  .toggle-chat-list {
+    display: none;
+  }
+  #chat-screen {
+    height: calc(100vh - 60px);
+  }
+  .chat-header {
+    height: 100px;
+    padding: 0 10px;
+  }
+  .chat-header h2, .chat-header p {
+    font-size: 18px;
+    margin: 5px;
+  }
+}
