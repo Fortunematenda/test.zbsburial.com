@@ -336,9 +336,8 @@ font-size: 15px !important;
                     <div class="mb-4 mt-2">
                       <h2>{{$perc}}%</h2>
                       <div class="progress" style="height:8px">
-                      <div class="progress-bar" role="progressbar" style="width: {{ $perc }}%;" aria-valuenow="{{ $perc }}" aria-valuemin="0" aria-valuemax="100"></div>
-
-            </div>
+                        <div class="progress-bar" role="progressbar" style="width: {{ $perc }}%;" aria-valuenow="{{ $perc }}" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
                     </div>
                     <div class="pull-in"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
                       
