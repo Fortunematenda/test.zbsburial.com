@@ -48,15 +48,6 @@ const ContactSupportScreen = ({ navigation }) => {
               <Text style={styles.contactButtonText}>Email Us</Text>
               <Text style={styles.contactButtonSubtext}>support@fortai.com</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={[styles.contactButton, { backgroundColor: colors.primary }]}
-              onPress={() => Linking.openURL('tel:+27612685933')}
-            >
-              <Ionicons name="call" size={24} color="#ffffff" />
-              <Text style={styles.contactButtonText}>Call Us</Text>
-              <Text style={styles.contactButtonSubtext}>86 331 2093</Text>
-            </TouchableOpacity>
           </View>
 
           <View style={[styles.hoursBox, dynamicStyles.hoursBox]}>
@@ -72,7 +63,7 @@ const ContactSupportScreen = ({ navigation }) => {
           <View style={[styles.infoBox, dynamicStyles.infoBox]}>
             <Ionicons name="chatbubble-ellipses" size={20} color={colors.primary} />
             <Text style={[styles.infoText, dynamicStyles.text]}>
-              For urgent matters, please call us directly. Email responses typically take 24-48 hours.
+              Email responses typically take 24-48 hours. We'll get back to you as soon as possible.
             </Text>
           </View>
         </View>

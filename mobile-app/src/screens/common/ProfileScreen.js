@@ -14,7 +14,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput as RNTextInput,
-  RefreshControl,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -87,7 +86,6 @@ const profileFieldStyles = StyleSheet.create({
 const ProfileScreen = ({ navigation, onLogout, onRefreshUserData }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [localImageUri, setLocalImageUri] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -99,6 +97,8 @@ const ProfileScreen = ({ navigation, onLogout, onRefreshUserData }) => {
     contact_number: '',
     location: '',
     zip_code: '',
+    latitude: '',
+    longitude: '',
     company_name: '',
     distance: '',
     biography: '',
@@ -121,6 +121,8 @@ const ProfileScreen = ({ navigation, onLogout, onRefreshUserData }) => {
         contact_number: user.contact_number || '',
         location: user.location || '',
         zip_code: user.zip_code ?? '',
+        latitude: user.latitude || '',
+        longitude: user.longitude || '',
         company_name: user.company_name || '',
         distance: user.distance || '',
         biography: user.biography || '',
@@ -128,7 +130,7 @@ const ProfileScreen = ({ navigation, onLogout, onRefreshUserData }) => {
     }
   }, [user]);
 
-  const loadUserData = async (isRefresh = false) => {
+  const loadUserData = async () => {
     try {
       // Always load fresh data from database
       const response = await ApiService.user.getProfile();
@@ -146,18 +148,10 @@ const ProfileScreen = ({ navigation, onLogout, onRefreshUserData }) => {
         }
       }
     } catch (error) {
-      logger.error('Error loading user data:', error);
+      // Silently handle user data loading errors
     } finally {
-      if (!isRefresh) {
-        setLoading(false);
-      }
+      setLoading(false);
     }
-  };
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await loadUserData(true);
-    setRefreshing(false);
   };
 
   const handleLogout = async () => {
@@ -496,6 +490,8 @@ const ProfileScreen = ({ navigation, onLogout, onRefreshUserData }) => {
         contact_number: formData.contact_number,
         location: formData.location,
         zip_code: formData.zip_code ? String(formData.zip_code) : '',
+        latitude: formData.latitude || '',
+        longitude: formData.longitude || '',
       };
 
       // Add expert-specific fields if user is an Expert
@@ -544,7 +540,6 @@ const ProfileScreen = ({ navigation, onLogout, onRefreshUserData }) => {
         first_name: user.first_name || '',
         last_name: user.last_name || '',
         email: user.email || '',
-        contact_number: user.contact_number || '',
         location: user.location || '',
         zip_code: user.zip_code ?? '',
         company_name: user.company_name || '',
@@ -688,13 +683,15 @@ const ProfileScreen = ({ navigation, onLogout, onRefreshUserData }) => {
           addressComponents: data.result.address_components 
         });
         
-        // Update both location and zip code
+        // Update location, zip code, latitude, and longitude
         // Always update zip_code to the extracted value (even if empty) when location changes
         setFormData(prev => {
           const updated = {
             ...prev,
             location: fullAddress,
             zip_code: extractedZipCode || '',
+            latitude: data.result.geometry.location.lat.toString(),
+            longitude: data.result.geometry.location.lng.toString(),
           };
           logger.info('FormData updated:', updated);
           return updated;
@@ -753,14 +750,6 @@ const ProfileScreen = ({ navigation, onLogout, onRefreshUserData }) => {
         contentContainerStyle={styles.contentContainer}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="none"
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={['#8B5CF6']}
-            tintColor="#8B5CF6"
-          />
-        }
       >
         {/* Profile Picture Section */}
         <View style={styles.profileSection}>
@@ -828,7 +817,6 @@ const ProfileScreen = ({ navigation, onLogout, onRefreshUserData }) => {
                       first_name: user.first_name || '',
                       last_name: user.last_name || '',
                       email: user.email || '',
-                      contact_number: user.contact_number || '',
                       location: user.location || '',
                       zip_code: user.zip_code ?? '',
                       company_name: user.company_name || '',
@@ -951,7 +939,7 @@ const ProfileScreen = ({ navigation, onLogout, onRefreshUserData }) => {
             )}
           </View>
           
-          {/* Zip Code - Display only (auto-populated from location) */}
+          {/* Zip Code - Display only (auto-populated from location, hidden when editing) */}
           {!isEditing && (
             <ProfileField
               key="zip_code"

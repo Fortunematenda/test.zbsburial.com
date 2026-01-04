@@ -11,6 +11,7 @@ import {
   Platform,
   ActivityIndicator,
   Dimensions,
+  Keyboard,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect, CommonActions } from '@react-navigation/native';
@@ -44,6 +45,7 @@ const ChatDetailsScreen = ({ route, navigation }) => {
   const [leadServiceName, setLeadServiceName] = useState(routeServiceName || 'Service');
   const scrollViewRef = useRef(null);
   const insets = useSafeAreaInsets();
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
     loadUserData();
@@ -52,6 +54,31 @@ const ChatDetailsScreen = ({ route, navigation }) => {
       loadLeadDetails();
     }
   }, [leadId]);
+
+  // Listen to keyboard events to keep input visible
+  useEffect(() => {
+    const keyboardWillShowListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      (e) => {
+        setKeyboardHeight(e.endCoordinates.height);
+        // Scroll to end when keyboard opens
+        setTimeout(() => {
+          scrollViewRef.current?.scrollToEnd({ animated: true });
+        }, 100);
+      }
+    );
+    const keyboardWillHideListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
+
+    return () => {
+      keyboardWillShowListener.remove();
+      keyboardWillHideListener.remove();
+    };
+  }, []);
 
   // Hide tab bar when this screen is focused
   useFocusEffect(
@@ -247,11 +274,16 @@ const ChatDetailsScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#8B5CF6" />
-      
-      {/* Header */}
-      <View style={styles.header}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+    >
+      <SafeAreaView style={styles.safeArea} edges={['top']}>
+        <StatusBar barStyle="light-content" backgroundColor="#8B5CF6" />
+        
+        {/* Header */}
+        <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
             // Get parent navigators
@@ -363,8 +395,10 @@ const ChatDetailsScreen = ({ route, navigation }) => {
           style={styles.messagesList}
           contentContainerStyle={[
             styles.messagesContent,
-            { paddingBottom: 80 }
+            { paddingBottom: 20 }
           ]}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="none"
           onContentSizeChange={() => {
             setTimeout(() => scrollViewRef.current?.scrollToEnd({ animated: true }), 100);
           }}
@@ -378,11 +412,7 @@ const ChatDetailsScreen = ({ route, navigation }) => {
       )}
 
       {/* Input Bar */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-        style={styles.inputWrapper}
-      >
+      <View style={[styles.inputWrapper, { paddingBottom: Math.max(insets.bottom + 10, 20) }]}>
         <View style={styles.inputContainer}>
           <View style={styles.inputBox}>
             <TouchableOpacity style={styles.emojiButton}>
@@ -398,6 +428,12 @@ const ChatDetailsScreen = ({ route, navigation }) => {
               maxLength={500}
               blurOnSubmit={false}
               underlineColorAndroid="transparent"
+              onFocus={() => {
+                // Scroll to end when input is focused
+                setTimeout(() => {
+                  scrollViewRef.current?.scrollToEnd({ animated: true });
+                }, 300);
+              }}
             />
             <TouchableOpacity style={styles.attachButton}>
               <Ionicons name="attach" size={24} color="#546E7A" />
@@ -421,8 +457,9 @@ const ChatDetailsScreen = ({ route, navigation }) => {
             )}
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
-    </View>
+      </View>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -430,6 +467,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ECE5DD',
+  },
+  safeArea: {
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
@@ -543,8 +583,10 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   inputWrapper: {
-    backgroundColor: 'transparent',
-    borderTopWidth: 0,
+    backgroundColor: '#F5F5F5',
+    borderTopWidth: 1,
+    borderTopColor: '#E0E0E0',
+    width: '100%',
   },
   inputContainer: {
     flexDirection: 'row',

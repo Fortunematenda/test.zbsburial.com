@@ -8,14 +8,17 @@ import {
   Text,
   Image,
   Animated,
+  Easing,
   Dimensions,
   ActivityIndicator,
   Alert,
   Pressable,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import MaskedView from '@react-native-masked-view/masked-view';
 import ApiService from '../../services/ApiService';
 import logger from '../../utils/logger';
 
@@ -36,9 +39,10 @@ const ProviderLandingPageScreen = ({ navigation }) => {
   const [isServiceInputFocused, setIsServiceInputFocused] = useState(false);
   
   // Animated text state
-  const phrases = ['Get High-Quality Leads, Fast!', 'Secure Jobs Instantly', 'Grow Your Business'];
+  // Animated text state - matching web landing page exactly
+  const phrases = ['High-Quality Leads', 'Unlock Growth', 'Boost Your Business'];
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
-  const [displayText, setDisplayText] = useState(phrases[0]);
+  const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const charIndexRef = useRef(0);
 
@@ -48,6 +52,13 @@ const ProviderLandingPageScreen = ({ navigation }) => {
     require('../../../assets/Genius.png'),
     require('../../../assets/LevelUp.png'),
     require('../../../assets/Scoutbird.png'),
+  ];
+
+  // Service category images
+  const serviceImages = [
+    { source: require('../../../assets/electrician.jpg'), title: 'Electrician' },
+    { source: require('../../../assets/handyman.jpg'), title: 'Handyman' },
+    { source: require('../../../assets/wifitech.jpg'), title: 'WiFi Tech' },
   ];
 
   // Load all services on mount
@@ -103,28 +114,32 @@ const ProviderLandingPageScreen = ({ navigation }) => {
     }
   }, [serviceText, allServices, selectedService]);
 
-  // Animated text effect
+  // Animated text effect - matching web landing page exactly
   useEffect(() => {
-    const timer = setInterval(() => {
+    const typeEffect = () => {
+      const currentPhrase = phrases[currentPhraseIndex];
+      
       if (isDeleting) {
-        if (charIndexRef.current > 0) {
-          setDisplayText(phrases[currentPhraseIndex].substring(0, charIndexRef.current - 1));
-          charIndexRef.current--;
-        } else {
+        charIndexRef.current--;
+        if (charIndexRef.current < 0) {
           setIsDeleting(false);
           setCurrentPhraseIndex((prev) => (prev + 1) % phrases.length);
+          charIndexRef.current = 0;
+          return;
         }
       } else {
-        if (charIndexRef.current < phrases[currentPhraseIndex].length) {
-          setDisplayText(phrases[currentPhraseIndex].substring(0, charIndexRef.current + 1));
-          charIndexRef.current++;
-        } else {
+        charIndexRef.current++;
+        if (charIndexRef.current > currentPhrase.length) {
           setTimeout(() => setIsDeleting(true), 2000);
+          return;
         }
       }
-    }, 100);
+      
+      setDisplayText(currentPhrase.substring(0, charIndexRef.current));
+    };
 
-    return () => clearInterval(timer);
+    const interval = setInterval(typeEffect, isDeleting ? 50 : 100);
+    return () => clearInterval(interval);
   }, [currentPhraseIndex, isDeleting, phrases]);
 
   // Handle service selection
@@ -155,6 +170,41 @@ const ProviderLandingPageScreen = ({ navigation }) => {
     }
   };
 
+  // Stars animation - exactly matching web CSS: sparkle 20s ease-in-out infinite
+  // 0%, 100%: translate(0, 0); 50%: translate(-50px, -50px)
+  const sparkleAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    // Using bezier curve to match CSS ease-in-out: cubic-bezier(0.42, 0, 0.58, 1)
+    const easingFunction = Easing.bezier(0.42, 0, 0.58, 1);
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(sparkleAnim, {
+          toValue: 0.5, // 50% keyframe - translate(-50px, -50px)
+          duration: 10000, // 10s to reach 50%
+          easing: easingFunction,
+          useNativeDriver: true,
+        }),
+        Animated.timing(sparkleAnim, {
+          toValue: 0, // Back to 0% - translate(0, 0)
+          duration: 10000, // 10s to return (20s total)
+          easing: easingFunction,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, []);
+
+  // Stars exactly matching web CSS radial-gradient positions and sizes
+  const stars = [
+    { id: 1, x: '20%', y: '30%', size: 2, opacity: 0.7 }, // radial-gradient(2px 2px at 20% 30%)
+    { id: 2, x: '60%', y: '70%', size: 2, opacity: 0.7 }, // radial-gradient(2px 2px at 60% 70%)
+    { id: 3, x: '50%', y: '50%', size: 1, opacity: 0.7 }, // radial-gradient(1px 1px at 50% 50%)
+    { id: 4, x: '80%', y: '10%', size: 1, opacity: 0.7 }, // radial-gradient(1px 1px at 80% 10%)
+    { id: 5, x: '90%', y: '60%', size: 2, opacity: 0.7 }, // radial-gradient(2px 2px at 90% 60%)
+    { id: 6, x: '33%', y: '80%', size: 1, opacity: 0.7 }, // radial-gradient(1px 1px at 33% 80%)
+  ];
+
   // Handle get started button
   const handleGetStarted = () => {
     if (!selectedService || !serviceId) {
@@ -184,8 +234,58 @@ const ProviderLandingPageScreen = ({ navigation }) => {
         locations={[0, 0.34, 0.65, 0.82]}
         style={styles.container}
       >
-        {/* Hamburger Menu - Top Right */}
+        {/* Stars Background - exactly matching web CSS .stars class */}
+        <Animated.View 
+          style={[
+            styles.starsContainer,
+            {
+              transform: [
+                {
+                  translateX: sparkleAnim.interpolate({
+                    inputRange: [0, 0.5, 1],
+                    outputRange: [0, -50, 0], // 0%:0, 50%:-50px, 100%:0 (matching web CSS)
+                  }),
+                },
+                {
+                  translateY: sparkleAnim.interpolate({
+                    inputRange: [0, 0.5, 1],
+                    outputRange: [0, -50, 0], // 0%:0, 50%:-50px, 100%:0 (matching web CSS)
+                  }),
+                },
+              ],
+            },
+          ]}
+          pointerEvents="none"
+        >
+          {stars.map((star) => (
+            <View
+              key={star.id}
+              style={[
+                styles.star,
+                {
+                  left: star.x,
+                  top: star.y,
+                  width: star.size,
+                  height: star.size,
+                  opacity: star.opacity,
+                },
+              ]}
+            />
+          ))}
+        </Animated.View>
+
+        {/* Top Navigation - Logo and Menu */}
         <View style={styles.topNav}>
+          {/* Logo */}
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../../../assets/fortailogoo.png')}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
+          </View>
+          
+          {/* Menu Button */}
           <TouchableOpacity
             style={styles.menuButton}
             onPress={() => setShowMenu(!showMenu)}
@@ -233,6 +333,7 @@ const ProviderLandingPageScreen = ({ navigation }) => {
         <ScrollView 
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
+          style={styles.scrollView}
         >
           {/* Header Section */}
           <View style={styles.header}>
@@ -241,9 +342,27 @@ const ProviderLandingPageScreen = ({ navigation }) => {
             </Text>
             
             <View style={styles.animatedTextContainer}>
-              <Text style={styles.animatedText}>
-                {displayText}
-              </Text>
+              <MaskedView
+                style={styles.maskedViewContainer}
+                maskElement={
+                  <View style={styles.maskContainer}>
+                    <Text style={styles.animatedTextMask}>
+                      {displayText}
+                    </Text>
+                  </View>
+                }
+              >
+                <LinearGradient
+                  colors={['#F87AFF', '#FB93D0', '#FFDD99', '#C3F0B2', '#2FD8FE']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.gradientFill}
+                >
+                  <Text style={styles.animatedTextGradient}>
+                    {displayText}
+                  </Text>
+                </LinearGradient>
+              </MaskedView>
             </View>
           </View>
 
@@ -326,15 +445,20 @@ const ProviderLandingPageScreen = ({ navigation }) => {
                           onPress={() => {
                             handleServiceSelect(service);
                           }}
-                          activeOpacity={0.7}
+                          activeOpacity={0.8}
                           delayPressIn={0}
                           delayPressOut={0}
                         >
+                          <View style={styles.suggestionIconContainer}>
+                            <Ionicons name="search" size={18} color="rgba(255, 255, 255, 0.6)" />
+                          </View>
                           <Text style={styles.suggestionText}>
                             {service.service_name || service.name || 'Unknown Service'}
                           </Text>
                           {isSelected && (
-                            <Ionicons name="checkmark-circle" size={20} color="#4F21A1" />
+                            <View style={styles.checkmarkContainer}>
+                              <Ionicons name="checkmark-circle" size={22} color="#8B5CF6" />
+                            </View>
                           )}
                         </TouchableOpacity>
                       );
@@ -382,12 +506,12 @@ const ProviderLandingPageScreen = ({ navigation }) => {
               style={styles.logoScroll}
               contentContainerStyle={styles.logoScrollContent}
             >
-              {companyLogos.map((logo, index) => (
+              {[...serviceImages, ...serviceImages].map((item, index) => (
                 <Image
                   key={index}
-                  source={logo}
-                  style={styles.logo}
-                  resizeMode="contain"
+                  source={item.source}
+                  style={styles.serviceCategoryLogo}
+                  resizeMode="cover"
                 />
               ))}
             </ScrollView>
@@ -399,6 +523,19 @@ const ProviderLandingPageScreen = ({ navigation }) => {
             <Text style={styles.featuresSubtitle}>
               Whether you're a small business or a large enterprise, we provide all the essential tools to help you get hired.
             </Text>
+            
+            {/* Service Category Images Grid */}
+            <View style={styles.serviceImagesGrid}>
+              {serviceImages.map((item, index) => (
+                <View key={index} style={styles.serviceImageCard}>
+                  <Image
+                    source={item.source}
+                    style={styles.serviceGridImage}
+                    resizeMode="cover"
+                  />
+                </View>
+              ))}
+            </View>
           </View>
 
           {/* Beyond Expectations Section */}
@@ -420,12 +557,38 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    position: 'relative',
+  },
+  starsContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: SCREEN_WIDTH * 2, // 200% width matching web background-size: 200% 200%
+    height: 900, // Matching web height: 900px
+    zIndex: 0,
+  },
+  star: {
+    position: 'absolute',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 50,
   },
   topNav: {
     position: 'absolute',
     top: 10,
+    left: 10,
     right: 10,
-    zIndex: 1000,
+    zIndex: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  logoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoImage: {
+    width: 40,
+    height: 40,
   },
   menuButton: {
     width: 40,
@@ -478,34 +641,73 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
+  scrollView: {
+    position: 'relative',
+    zIndex: 1,
+  },
   scrollContent: {
     paddingVertical: 40,
+    paddingTop: 100,
     paddingHorizontal: 20,
     alignItems: 'center',
   },
   header: {
     alignItems: 'center',
     marginBottom: 30,
-    marginTop: 60,
+    marginTop: 80,
   },
   mainTitle: {
     fontSize: 28,
-    fontWeight: '700',
+    fontWeight: '800',
     color: '#FFFFFF',
     textAlign: 'center',
     marginBottom: 16,
     lineHeight: 36,
+    letterSpacing: -0.4,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif-medium',
   },
   animatedTextContainer: {
     minHeight: 30,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  animatedText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#FFD700',
+  maskedViewContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  maskContainer: {
+    backgroundColor: 'transparent',
+  },
+  animatedTextMask: {
+    fontSize: 17,
+    fontWeight: '700',
     textAlign: 'center',
+    letterSpacing: 0.3,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif',
+    backgroundColor: 'transparent',
+    color: '#FFFFFF', // White for mask - defines the text shape
+    textShadowColor: 'transparent',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 0,
+  },
+  gradientFill: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 200,
+    minHeight: 30,
+  },
+  animatedTextGradient: {
+    fontSize: 17,
+    fontWeight: '700',
+    textAlign: 'center',
+    letterSpacing: 0.3,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif',
+    color: 'transparent', // Transparent so gradient fills the text
+    textShadowColor: 'transparent',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 0,
   },
   searchSection: {
     width: '100%',
@@ -535,7 +737,10 @@ const styles = StyleSheet.create({
     flex: 1,
     color: '#FFFFFF',
     fontSize: 16,
+    fontWeight: '400',
     padding: 0,
+    letterSpacing: 0.1,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif',
   },
   loadingIndicator: {
     marginLeft: 10,
@@ -545,39 +750,58 @@ const styles = StyleSheet.create({
     top: 65,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.95)',
-    borderRadius: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-    maxHeight: 200,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    maxHeight: 240,
     zIndex: 1000,
-    marginTop: 5,
-    elevation: 5,
+    marginTop: 8,
+    elevation: 8,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    overflow: 'hidden',
   },
   suggestionsScrollView: {
-    maxHeight: 200,
+    maxHeight: 240,
   },
   suggestionItem: {
-    padding: 15,
+    paddingVertical: 16,
+    paddingHorizontal: 18,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
+    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    backgroundColor: 'transparent',
+    minHeight: 56,
   },
   suggestionItemSelected: {
-    backgroundColor: 'rgba(79, 33, 161, 0.3)',
-    borderLeftWidth: 3,
-    borderLeftColor: '#4F21A1',
+    backgroundColor: 'rgba(139, 92, 246, 0.2)',
+    borderLeftWidth: 4,
+    borderLeftColor: '#8B5CF6',
+  },
+  suggestionIconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
   },
   suggestionText: {
     color: '#FFFFFF',
     fontSize: 16,
+    fontWeight: '500',
     flex: 1,
+    letterSpacing: 0.2,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif-medium',
+  },
+  checkmarkContainer: {
+    marginLeft: 8,
   },
   getStartedButton: {
     flexDirection: 'row',
@@ -596,8 +820,10 @@ const styles = StyleSheet.create({
   },
   getStartedButtonText: {
     color: '#4F21A1',
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 17,
+    fontWeight: '700',
+    letterSpacing: 0.3,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif-medium',
   },
   imageSection: {
     width: '100%',
@@ -614,11 +840,13 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   trustedTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: 'rgba(255, 255, 255, 0.7)',
+    fontSize: 15,
+    fontWeight: '500',
+    color: 'rgba(255, 255, 255, 0.8)',
     textAlign: 'center',
     marginBottom: 20,
+    letterSpacing: 0.2,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif',
   },
   logoScroll: {
     width: '100%',
@@ -633,24 +861,57 @@ const styles = StyleSheet.create({
     width: 120,
     height: 60,
   },
+  serviceCategoryLogo: {
+    height: 48,
+    width: 'auto',
+    marginRight: 48,
+    borderRadius: 8,
+  },
+  serviceImagesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 16,
+    marginTop: 40,
+    paddingHorizontal: 20,
+  },
+  serviceImageCard: {
+    width: 300,
+    height: 300,
+    borderWidth: 4,
+    borderColor: '#A855F7',
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  serviceGridImage: {
+    width: '100%',
+    height: '100%',
+  },
   featuresSection: {
     width: '100%',
     alignItems: 'center',
     marginBottom: 40,
   },
   featuresTitle: {
-    fontSize: 28,
-    fontWeight: '700',
+    fontSize: 26,
+    fontWeight: '800',
     color: '#FFFFFF',
     textAlign: 'center',
     marginBottom: 16,
+    lineHeight: 32,
+    letterSpacing: -0.3,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif-medium',
   },
   featuresSubtitle: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.7)',
+    fontWeight: '400',
+    color: 'rgba(255, 255, 255, 0.85)',
     textAlign: 'center',
     paddingHorizontal: 20,
     lineHeight: 24,
+    letterSpacing: 0.1,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif',
   },
   beyondSection: {
     width: '100%',
@@ -658,17 +919,23 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   beyondTitle: {
-    fontSize: 28,
-    fontWeight: '700',
+    fontSize: 26,
+    fontWeight: '800',
     color: '#FFFFFF',
     textAlign: 'center',
     marginBottom: 16,
+    lineHeight: 32,
+    letterSpacing: -0.3,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif-medium',
   },
   beyondSubtitle: {
-    fontSize: 18,
-    color: 'rgba(255, 255, 255, 0.7)',
+    fontSize: 16,
+    fontWeight: '400',
+    color: 'rgba(255, 255, 255, 0.85)',
     textAlign: 'center',
-    lineHeight: 26,
+    lineHeight: 24,
+    letterSpacing: 0.1,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif',
   },
 });
 

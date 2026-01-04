@@ -220,18 +220,64 @@ Route::post('/user/location', function (Request $request) {
             ], 401);
         }
 
+        // Log what we're receiving
+        Log::info('📍 Location update request', [
+            'all_data' => $request->all(),
+            'zip_code' => $request->input('zip_code'),
+            'has_zip_code' => $request->has('zip_code'),
+            'zip_code_type' => gettype($request->input('zip_code')),
+        ]);
+
         $request->validate([
             'address'   => 'required|string|max:255',
             'latitude'  => 'required|string|max:20',
             'longitude' => 'required|string|max:20',
+            'zip_code'  => 'nullable|string|max:20',
             'distance'  => 'nullable|string|in:10,20,50,0',
         ]);
 
-        $user->update([
+        // Prepare update data - use same approach as ProfileController
+        // ProfileController uses $request->only() which includes all fields if present
+        $updateData = [
             'location'  => $request->address,
             'latitude'  => $request->latitude,
             'longitude' => $request->longitude,
             'distance'  => $request->distance ?? $user->distance,
+        ];
+        
+        // Only include zip_code if it's provided and not empty
+        // If empty string is sent, keep existing zip_code (don't overwrite with empty)
+        if ($request->has('zip_code')) {
+            $zipCodeValue = $request->zip_code;
+            if (!empty(trim($zipCodeValue ?? ''))) {
+                $updateData['zip_code'] = trim($zipCodeValue);
+            }
+            // If zip_code is empty, don't include it in updateData (keeps existing value)
+        }
+        
+        error_log('📍 Location update - updateData: ' . json_encode($updateData));
+        error_log('📍 Location update - old zip_code: ' . ($user->zip_code ?? 'NULL'));
+        
+        Log::info('📍 Location update data', [
+            'updateData' => $updateData,
+            'old_zip_code' => $user->zip_code,
+            'request_all_keys' => array_keys($request->all()),
+            'request_has_zip_code' => $request->has('zip_code'),
+            'request_zip_code_value' => $request->input('zip_code'),
+        ]);
+        
+        $user->update($updateData);
+        $user->refresh();
+        
+        // Verify zip_code was saved
+        $dbZipCode = DB::table('users')->where('id', $user->id)->value('zip_code');
+        
+        error_log('📍 Location updated - new zip_code from model: ' . ($user->zip_code ?? 'NULL'));
+        error_log('📍 Location updated - new zip_code from DB: ' . ($dbZipCode ?? 'NULL'));
+        
+        Log::info('📍 Location updated', [
+            'new_zip_code_from_model' => $user->zip_code,
+            'new_zip_code_from_db' => $dbZipCode,
         ]);
 
         return response()->json([
@@ -241,6 +287,7 @@ Route::post('/user/location', function (Request $request) {
                 'location'  => $user->location,
                 'latitude'  => $user->latitude,
                 'longitude' => $user->longitude,
+                'zip_code'  => $user->zip_code,
                 'distance'  => $user->distance,
             ]
         ]);

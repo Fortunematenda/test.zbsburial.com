@@ -17,7 +17,6 @@ import { useForm, Controller } from 'react-hook-form';
 import Toast from 'react-native-toast-message';
 import { Ionicons } from '@expo/vector-icons';
 import { AuthService } from '../../services/AuthService';
-import logger from '../../utils/logger';
 
 const LoginScreen = ({ navigation, onLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,10 +25,8 @@ const LoginScreen = ({ navigation, onLogin }) => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    logger.log('🔐 Starting login process...');
     try {
       const result = await AuthService.login(data);
-      logger.log('🔐 Login result:', result.success ? 'Success' : 'Failed');
       
       if (result.success) {
         Toast.show({
@@ -42,39 +39,58 @@ const LoginScreen = ({ navigation, onLogin }) => {
         });
         onLogin(result.user);
       } else {
-        // Show more specific error messages
-        let errorMessage = result.message || 'Login failed. Please try again.';
+        // Show professional, user-friendly error messages
+        let errorTitle = 'Login Failed';
+        let errorMessage = result.message || 'Unable to sign in. Please check your credentials and try again.';
         
-        // Check if it's a timeout/server unreachable issue
-        if (errorMessage.includes('timeout') || errorMessage.includes('connection')) {
-          errorMessage = 'Cannot connect to server. Please verify:\n• Server is running on port 8080\n• Device and server on same network\n• Firewall allows connections';
+        // Map common error messages to user-friendly ones
+        if (errorMessage.toLowerCase().includes('invalid password') || 
+            errorMessage.toLowerCase().includes('password') ||
+            errorMessage.toLowerCase().includes('credentials')) {
+          errorTitle = 'Invalid Credentials';
+          errorMessage = 'The email or password you entered is incorrect. Please try again or use "Forgot Password" to reset.';
+        } else if (errorMessage.toLowerCase().includes('email') && 
+                   (errorMessage.toLowerCase().includes('not found') || 
+                    errorMessage.toLowerCase().includes('does not exist'))) {
+          errorTitle = 'Account Not Found';
+          errorMessage = 'No account found with this email address. Please check your email or create a new account.';
+        } else if (errorMessage.includes('timeout') || errorMessage.includes('connection')) {
+          errorTitle = 'Connection Error';
+          errorMessage = 'Unable to connect to the server. Please check your internet connection and try again.';
+        } else if (errorMessage.toLowerCase().includes('network')) {
+          errorTitle = 'Network Error';
+          errorMessage = 'Please check your internet connection and try again.';
         }
         
         Toast.show({
           type: 'error',
-          text1: '',
+          text1: errorTitle,
           text2: errorMessage,
           position: 'top',
           topOffset: 100,
-          visibilityTime: 3000,
+          visibilityTime: 4000,
         });
       }
     } catch (error) {
-      // Handle timeout and network errors specifically
-      let errorMessage = 'An unexpected error occurred';
+      // Handle unexpected errors with professional messages
+      let errorTitle = 'Login Error';
+      let errorMessage = 'An unexpected error occurred. Please try again.';
+      
       if (error.message && error.message.includes('timeout')) {
-        errorMessage = 'Server connection timeout. Please verify the server is running and accessible.';
+        errorTitle = 'Connection Timeout';
+        errorMessage = 'The request took too long. Please check your connection and try again.';
       } else if (error.message && error.message.includes('Network')) {
-        errorMessage = 'Network error. Please check your connection and verify the server is running.';
+        errorTitle = 'Network Error';
+        errorMessage = 'Unable to connect. Please check your internet connection.';
       }
       
       Toast.show({
         type: 'error',
-        text1: '',
+        text1: errorTitle,
         text2: errorMessage,
         position: 'top',
         topOffset: 100,
-        visibilityTime: 3000,
+        visibilityTime: 4000,
       });
     } finally {
       setIsLoading(false);

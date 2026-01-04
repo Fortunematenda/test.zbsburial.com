@@ -446,33 +446,42 @@ catch(Exception $e)
         $user_id = $user->id;
         
         // Use DistanceHelper to generate distance calculation SQL
-        $distanceSql = DistanceHelper::getDistanceSql(
-            $user->latitude,
-            $user->longitude,
-            'leads.latitude',
-            'leads.longitude'
-        );
+        // Only calculate distance if user has valid coordinates
+        $selectFields = [
+            'm.service_name', 
+            'leads.user_id as lead_user_id',  
+            'leads.service_id', 
+            's.first_name', 
+            's.last_name', 
+            'leads.date_entered', 
+            'leads.id', 
+            'leads.description', 
+            'leads.location',
+            's.is_phone_verified',
+            'leads.urgent',
+            'leads.credits',
+            'leads.hiring_decision',
+        ];
+        
+        // Only add distance calculation if user has valid coordinates
+        if ($user->latitude !== null && $user->longitude !== null && 
+            is_numeric($user->latitude) && is_numeric($user->longitude)) {
+            $distanceSql = DistanceHelper::getDistanceSql(
+                (float) $user->latitude,
+                (float) $user->longitude,
+                'leads.latitude',
+                'leads.longitude'
+            );
+            $selectFields[] = DB::raw($distanceSql);
+        } else {
+            // If no coordinates, set distance to null
+            $selectFields[] = DB::raw('NULL AS distance');
+        }
         
         $query = LeadsModel::join('user_services as u', 'leads.service_id', '=', 'u.service_id')
     ->join('master_services as m', 'u.service_id', '=', 'm.id')
     ->join('users as s', 'leads.user_id', '=', 's.id')
-    ->select(
-        'm.service_name', 
-        'leads.user_id as lead_user_id',  
-        'leads.service_id', 
-        's.first_name', 
-        's.last_name', 
-        'leads.date_entered', 
-        'leads.id', 
-        'leads.description', 
-        'leads.location',
-        's.is_phone_verified',
-        'leads.urgent',
-        'leads.credits',
-        'leads.hiring_decision',
-        // Calculate the distance using DistanceHelper
-        DB::raw($distanceSql)
-    )
+    ->select($selectFields)
     ->where('u.user_id', $user_id)
     ->where('leads.status', '=', 'Open')
     ->whereNotIn('leads.id', function ($query) use ($user_id) {
@@ -1156,7 +1165,7 @@ public function registerPushToken(Request $request)
             'token' => $token
         ]);
 
-        \Log::info('Push token registered', [
+        Log::info('Push token registered', [
             'user_id' => $user->id,
             'platform' => $platform,
             'is_expo_token' => $isExpoToken,
@@ -1169,11 +1178,10 @@ public function registerPushToken(Request $request)
         ], 200);
 
     } catch (\Exception $e) {
-        \Log::error('Error registering push token', [
+        logger()->error('Error registering push token', [
             'error' => $e->getMessage(),
             'trace' => $e->getTraceAsString()
         ]);
-        
         return response()->json([
             'success' => false,
             'message' => 'Failed to register push token: ' . $e->getMessage()
@@ -1209,7 +1217,7 @@ public function getNotifications(Request $request)
             ->paginate($perPage, ['*'], 'page', $page);
 
         // Parse notification data
-        $formattedNotifications = $notifications->map(function ($notification) {
+        $formattedNotifications = collect($notifications->items())->map(function ($notification) {
             $data = json_decode($notification->data, true);
             return [
                 'id' => $notification->id,
@@ -1225,7 +1233,7 @@ public function getNotifications(Request $request)
                 'created_at' => $notification->created_at,
                 'is_read' => !is_null($notification->read_at),
             ];
-        });
+        })->values();
 
         return response()->json([
             'success' => true,

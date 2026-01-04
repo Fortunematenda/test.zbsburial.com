@@ -53,18 +53,6 @@ const HelpCenterScreen = ({ navigation }) => {
               <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
             </TouchableOpacity>
 
-            <TouchableOpacity 
-              style={[styles.contactItem, dynamicStyles.contactItem]}
-              onPress={() => Linking.openURL('tel:+27612685933')}
-            >
-              <Ionicons name="call" size={24} color="#8B5CF6" />
-              <View style={styles.contactInfo}>
-                <Text style={[styles.contactLabel, dynamicStyles.textSecondary]}>Phone</Text>
-                <Text style={[styles.contactValue, dynamicStyles.text]}>86 331 2093</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
-            </TouchableOpacity>
-
             <View style={[styles.contactItem, dynamicStyles.contactItem]}>
               <Ionicons name="time" size={24} color="#8B5CF6" />
               <View style={styles.contactInfo}>

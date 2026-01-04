@@ -15,6 +15,8 @@ import {
   Modal,
   RefreshControl,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 import { Card } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
@@ -38,6 +40,41 @@ const ExpertProfileScreen = ({ route, navigation }) => {
   const [user, setUser] = useState(null);
   const [selectedPortfolioItem, setSelectedPortfolioItem] = useState(null);
   const [showPortfolioModal, setShowPortfolioModal] = useState(false);
+  const insets = useSafeAreaInsets();
+
+  // Ensure tab bar is visible when this screen is focused
+  useFocusEffect(
+    React.useCallback(() => {
+      // Get the tab navigator (parent of stack navigator)
+      const tabNavigator = navigation.getParent()?.getParent();
+      
+      // Show tab bar immediately
+      if (tabNavigator) {
+        tabNavigator.setOptions({
+          tabBarStyle: {
+            backgroundColor: '#ffffff',
+            borderTopWidth: 1,
+            borderTopColor: '#e0e0e0',
+            paddingBottom: 5,
+            paddingTop: 5,
+            height: 60,
+          }
+        });
+      } else {
+        // Fallback: try parent directly
+        navigation.getParent()?.setOptions({
+          tabBarStyle: {
+            backgroundColor: '#ffffff',
+            borderTopWidth: 1,
+            borderTopColor: '#e0e0e0',
+            paddingBottom: 5,
+            paddingTop: 5,
+            height: 60,
+          }
+        });
+      }
+    }, [navigation])
+  );
 
   useEffect(() => {
     if (expertId) {
@@ -245,7 +282,7 @@ const ExpertProfileScreen = ({ route, navigation }) => {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['top']}>
         <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#8B5CF6" />
@@ -257,7 +294,7 @@ const ExpertProfileScreen = ({ route, navigation }) => {
 
   if (!expert) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['top']}>
         <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
         <View style={styles.errorContainer}>
           <Ionicons name="person-circle-outline" size={64} color="#ccc" />
@@ -268,7 +305,7 @@ const ExpertProfileScreen = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
       
       {/* Header */}
@@ -282,6 +319,7 @@ const ExpertProfileScreen = ({ route, navigation }) => {
 
       <ScrollView 
         style={styles.scrollView}
+        contentContainerStyle={{ paddingBottom: Math.max(insets.bottom, 20) + 60 }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

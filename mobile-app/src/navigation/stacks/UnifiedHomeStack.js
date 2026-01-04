@@ -11,6 +11,7 @@ import ContactSupportScreen from '../../screens/common/ContactSupportScreen';
 import TermsOfServiceScreen from '../../screens/common/TermsOfServiceScreen';
 import PrivacyPolicyScreen from '../../screens/common/PrivacyPolicyScreen';
 import PrivacySecurityScreen from '../../screens/common/PrivacySecurityScreen';
+import ChangePasswordScreen from '../../screens/common/ChangePasswordScreen';
 import PaymentMethodsScreen from '../../screens/common/PaymentMethodsScreen';
 import CreditsScreen from '../../screens/common/CreditsScreen';
 import CreditsHistoryScreen from '../../screens/common/CreditsHistoryScreen';
@@ -106,9 +107,14 @@ const UnifiedHomeStack = ({ onLogout, onRefreshUserData, userRole }) => {
         component={PrivacyPolicyScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen 
-        name="PrivacySecurity" 
+      <Stack.Screen
+        name="PrivacySecurity"
         component={PrivacySecurityScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePasswordScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen 

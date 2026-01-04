@@ -55,6 +55,7 @@ const EditLocationScreen = ({ navigation, onRefreshUserData }) => {
           address: user.location || '',
           latitude: user.latitude || '',
           longitude: user.longitude || '',
+          zip_code: user.zip_code || '',
           distance: user.distance || '50',
         });
       }
@@ -109,11 +110,23 @@ const EditLocationScreen = ({ navigation, onRefreshUserData }) => {
       const data = await response.json();
 
       if (data.result && data.result.geometry) {
+        // Extract zip code from address components
+        let extractedZipCode = '';
+        if (data.result.address_components) {
+          for (const component of data.result.address_components) {
+            if (component.types.includes('postal_code')) {
+              extractedZipCode = component.long_name || component.short_name || '';
+              break;
+            }
+          }
+        }
+        
         setLocation(prev => ({
           ...prev,
           address: prediction.description || prediction.structured_formatting?.main_text || '',
           latitude: data.result.geometry.location.lat.toString(),
           longitude: data.result.geometry.location.lng.toString(),
+          zip_code: extractedZipCode,
         }));
         
         setShowSuggestions(false);
@@ -180,6 +193,7 @@ const EditLocationScreen = ({ navigation, onRefreshUserData }) => {
           address: fullAddress || prev.address,
           latitude: latitude.toString(),
           longitude: longitude.toString(),
+          zip_code: address.postalCode || prev.zip_code || '',
         }));
         
         // Show success feedback
@@ -220,12 +234,18 @@ const EditLocationScreen = ({ navigation, onRefreshUserData }) => {
       setSaving(true);
       
       // Prepare location data with correct field names for API
+      // Only include zip_code if it has a value (don't send empty string)
       const locationData = {
         address: location.address,
         latitude: location.latitude,
         longitude: location.longitude,
         distance: location.distance || '50', // Ensure distance is always sent
       };
+      
+      // Only add zip_code if it's not empty
+      if (location.zip_code && location.zip_code.trim() !== '') {
+        locationData.zip_code = location.zip_code.trim();
+      }
       
       logger.log('📍 Saving location data:', locationData);
       

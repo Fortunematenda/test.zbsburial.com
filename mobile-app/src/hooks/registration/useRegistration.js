@@ -356,23 +356,67 @@ export const useRegistration = (route, navigation, onLogin) => {
           onLogin(result.user);
         }
       } else {
+        // Show professional, user-friendly error messages
+        let errorTitle = 'Registration Failed';
+        let errorMessage = result.message || 'Unable to create your account. Please try again.';
+        
+        // Map common error messages to user-friendly ones
+        if (errorMessage.toLowerCase().includes('email') && 
+            (errorMessage.toLowerCase().includes('already') || 
+             errorMessage.toLowerCase().includes('taken') ||
+             errorMessage.toLowerCase().includes('exists'))) {
+          errorTitle = 'Email Already Registered';
+          errorMessage = 'This email address is already in use. Please sign in or use a different email.';
+        } else if (errorMessage.toLowerCase().includes('password')) {
+          errorTitle = 'Password Error';
+          if (errorMessage.toLowerCase().includes('match')) {
+            errorMessage = 'Passwords do not match. Please ensure both password fields are identical.';
+          } else if (errorMessage.toLowerCase().includes('length') || errorMessage.toLowerCase().includes('short')) {
+            errorMessage = 'Password must be at least 8 characters long. Please choose a stronger password.';
+          } else {
+            errorMessage = 'Please check your password and try again.';
+          }
+        } else if (errorMessage.toLowerCase().includes('validation') || 
+                   errorMessage.toLowerCase().includes('required')) {
+          errorTitle = 'Missing Information';
+          errorMessage = 'Please fill in all required fields and try again.';
+        } else if (errorMessage.includes('timeout') || errorMessage.includes('connection')) {
+          errorTitle = 'Connection Error';
+          errorMessage = 'Unable to connect to the server. Please check your internet connection and try again.';
+        } else if (errorMessage.toLowerCase().includes('network')) {
+          errorTitle = 'Network Error';
+          errorMessage = 'Please check your internet connection and try again.';
+        }
+        
         Toast.show({
           type: 'error',
-          text1: '',
-          text2: result.message,
+          text1: errorTitle,
+          text2: errorMessage,
           position: 'top',
           topOffset: 100,
-          visibilityTime: 2500,
+          visibilityTime: 4000,
         });
       }
     } catch (error) {
+      // Handle unexpected errors with professional messages
+      let errorTitle = 'Registration Error';
+      let errorMessage = 'An unexpected error occurred. Please try again.';
+      
+      if (error.message && error.message.includes('timeout')) {
+        errorTitle = 'Connection Timeout';
+        errorMessage = 'The request took too long. Please check your connection and try again.';
+      } else if (error.message && error.message.includes('Network')) {
+        errorTitle = 'Network Error';
+        errorMessage = 'Unable to connect. Please check your internet connection.';
+      }
+      
       Toast.show({
         type: 'error',
-        text1: '',
-        text2: 'An unexpected error occurred',
+        text1: errorTitle,
+        text2: errorMessage,
         position: 'top',
         topOffset: 100,
-        visibilityTime: 2500,
+        visibilityTime: 4000,
       });
     } finally {
       setIsLoading(false);

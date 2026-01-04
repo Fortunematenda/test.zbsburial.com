@@ -9,7 +9,6 @@ import {
   StatusBar,
   Switch,
   Alert,
-  RefreshControl,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
@@ -78,7 +77,6 @@ const SettingsScreen = ({ navigation, onLogout, onRefreshUserData, route }) => {
     locationServices: true,
   });
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   
   // Ref to prevent double-clicks (using timestamp for better control)
   const lastPressTime = useRef(0);
@@ -162,13 +160,22 @@ const SettingsScreen = ({ navigation, onLogout, onRefreshUserData, route }) => {
       }
     } catch (error) {
       logger.error('Error loading settings:', error);
+      // Use defaults on error
+      setSettings({
+        pushNotifications: true,
+        emailNotifications: true,
+        locationServices: true,
+      });
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Failed to load settings. Using defaults.',
+        position: 'top',
+        topOffset: 80,
+      });
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await Promise.all([loadUserData(), loadSettings()]);
-    setRefreshing(false);
   };
 
   const saveSettings = async (newSettings) => {
@@ -318,107 +325,26 @@ const SettingsScreen = ({ navigation, onLogout, onRefreshUserData, route }) => {
         <View style={styles.headerRight} />
       </View>
 
-      <ScrollView 
-        style={styles.content} 
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={['#8B5CF6']}
-            tintColor="#8B5CF6"
-          />
-        }
-      >
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {loading && (
           <View style={styles.loadingContainer}>
             <Text style={dynamicStyles.settingTitle}>Loading settings...</Text>
           </View>
         )}
-        {/* Account Section */}
+        {/* Account Settings Section */}
         <View style={[styles.section, dynamicStyles.section]}>
-          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Account</Text>
+          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Account Settings</Text>
           
           <SettingItem
-            icon="shield-checkmark"
-            title="Privacy & Security"
-            subtitle="Control your privacy settings"
-            onPress={() => navigateSafely('PrivacySecurity')}
+            icon="lock-closed"
+            title="Change Password"
+            subtitle="Update your account password"
+            onPress={() => navigateSafely('ChangePassword')}
             textSecondaryColor={colors.textSecondary}
             settingItemStyle={dynamicStyles.settingItem}
             settingTitleStyle={dynamicStyles.settingTitle}
             settingSubtitleStyle={dynamicStyles.settingSubtitle}
           />
-          
-          {/* Buy Credits - Only for Expert/Provider users, hidden for Customers */}
-          {user && (user.role === 'Expert' || user.role === 'Provider') && (
-            <SettingItem
-              icon="wallet"
-              title="Buy Credits"
-              subtitle="Purchase credits to unlock leads"
-              onPress={() => navigateSafely('Credits')}
-              textSecondaryColor={colors.textSecondary}
-              settingItemStyle={dynamicStyles.settingItem}
-              settingTitleStyle={dynamicStyles.settingTitle}
-              settingSubtitleStyle={dynamicStyles.settingSubtitle}
-            />
-          )}
-        </View>
-
-        {/* Professional Section - Only for Expert/Provider users */}
-        {user && (user.role === 'Expert' || user.role === 'Provider') && (
-          <View style={[styles.section, dynamicStyles.section]}>
-            <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Professional</Text>
-            
-            <SettingItem
-              icon="briefcase"
-              title="My Services"
-              subtitle="Manage services you provide"
-              onPress={() => navigateSafely('EditServices')}
-              textSecondaryColor={colors.textSecondary}
-              settingItemStyle={dynamicStyles.settingItem}
-              settingTitleStyle={dynamicStyles.settingTitle}
-              settingSubtitleStyle={dynamicStyles.settingSubtitle}
-            />
-            
-            <SettingItem
-              icon="location"
-              title="Location & Radius"
-              subtitle="Update your location and coverage area"
-              onPress={() => navigateSafely('EditLocation')}
-              textSecondaryColor={colors.textSecondary}
-              settingItemStyle={dynamicStyles.settingItem}
-              settingTitleStyle={dynamicStyles.settingTitle}
-              settingSubtitleStyle={dynamicStyles.settingSubtitle}
-            />
-            
-            <SettingItem
-              icon="images"
-              title="Portfolio"
-              subtitle="Add photos of your past work"
-              onPress={() => navigateSafely('Portfolio')}
-              textSecondaryColor={colors.textSecondary}
-              settingItemStyle={dynamicStyles.settingItem}
-              settingTitleStyle={dynamicStyles.settingTitle}
-              settingSubtitleStyle={dynamicStyles.settingSubtitle}
-            />
-            
-            <SettingItem
-              icon="business"
-              title="Company Details"
-              subtitle="Edit company name and biography"
-              onPress={() => navigateSafely('EditCompany')}
-              textSecondaryColor={colors.textSecondary}
-              settingItemStyle={dynamicStyles.settingItem}
-              settingTitleStyle={dynamicStyles.settingTitle}
-              settingSubtitleStyle={dynamicStyles.settingSubtitle}
-            />
-          </View>
-        )}
-
-        {/* Notifications Section */}
-        <View style={[styles.section, dynamicStyles.section]}>
-          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Notifications</Text>
           
           <SettingItem
             icon="notifications"
@@ -458,6 +384,35 @@ const SettingsScreen = ({ navigation, onLogout, onRefreshUserData, route }) => {
             settingSubtitleStyle={dynamicStyles.settingSubtitle}
           />
         </View>
+
+        {/* Professional Settings Section - Only for Expert/Provider users */}
+        {user && (user.role === 'Expert' || user.role === 'Provider') && (
+          <View style={[styles.section, dynamicStyles.section]}>
+            <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Professional Settings</Text>
+            
+            <SettingItem
+              icon="briefcase"
+              title="My Services"
+              subtitle="Manage services you provide"
+              onPress={() => navigateSafely('EditServices')}
+              textSecondaryColor={colors.textSecondary}
+              settingItemStyle={dynamicStyles.settingItem}
+              settingTitleStyle={dynamicStyles.settingTitle}
+              settingSubtitleStyle={dynamicStyles.settingSubtitle}
+            />
+            
+            <SettingItem
+              icon="images"
+              title="Portfolio"
+              subtitle="Add photos of your past work"
+              onPress={() => navigateSafely('Portfolio')}
+              textSecondaryColor={colors.textSecondary}
+              settingItemStyle={dynamicStyles.settingItem}
+              settingTitleStyle={dynamicStyles.settingTitle}
+              settingSubtitleStyle={dynamicStyles.settingSubtitle}
+            />
+          </View>
+        )}
 
         {/* App Settings Section */}
         <View style={[styles.section, dynamicStyles.section]}>
@@ -516,17 +471,6 @@ const SettingsScreen = ({ navigation, onLogout, onRefreshUserData, route }) => {
         {/* Support Section */}
         <View style={[styles.section, dynamicStyles.section]}>
           <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Support</Text>
-          
-          <SettingItem
-            icon="help-circle"
-            title="Help Center"
-            subtitle="Get help and support"
-            onPress={() => navigateSafely('HelpCenter')}
-            textSecondaryColor={colors.textSecondary}
-            settingItemStyle={dynamicStyles.settingItem}
-            settingTitleStyle={dynamicStyles.settingTitle}
-            settingSubtitleStyle={dynamicStyles.settingSubtitle}
-          />
           
           <SettingItem
             icon="chatbubble"
@@ -589,15 +533,26 @@ const SettingsScreen = ({ navigation, onLogout, onRefreshUserData, route }) => {
           />
         </View>
 
-        {/* Logout Button */}
-        <TouchableOpacity 
-          style={styles.logoutButton} 
-          onPress={handleLogout}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="log-out" size={24} color="#FF4444" />
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
+        {/* Security & Logout Section */}
+        <View style={[styles.section, dynamicStyles.section]}>
+          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Security & Logout</Text>
+          
+          <TouchableOpacity 
+            style={[styles.settingItem, dynamicStyles.settingItem, styles.logoutItem]} 
+            onPress={handleLogout}
+            activeOpacity={0.7}
+          >
+            <View style={styles.settingLeft}>
+              <View style={styles.settingIcon}>
+                <Ionicons name="log-out" size={24} color="#FF4444" />
+              </View>
+              <View style={styles.settingText}>
+                <Text style={[styles.settingTitle, dynamicStyles.settingTitle, styles.logoutText]}>Logout</Text>
+                <Text style={[styles.settingSubtitle, dynamicStyles.settingSubtitle]}>Sign out of your account</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -716,6 +671,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  logoutItem: {
+    borderBottomWidth: 0,
+  },
   logoutButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -731,7 +689,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FF4444',
     fontWeight: '600',
-    marginLeft: 8,
   },
   loadingContainer: {
     padding: 20,

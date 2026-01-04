@@ -471,12 +471,12 @@ class ApiService {
 
   // Auth endpoints
   static auth = {
-    login: (credentials) => this.post('/simple-login', credentials, { timeout: 10000 }), // Using simple login endpoint with 10s timeout
+    login: (credentials) => this.post('/simple-login', credentials, { timeout: 5000 }), // Modern professional standard: 5 seconds for authentication
     register: (userData) => this.post('/simple-register', userData), // Using simple registration endpoint
     logout: () => this.post('/mobile/session/logout'),
     verifyOtp: (otpData) => this.post('/verify-otp', otpData),
     resendOtp: (phone) => this.post('/auth/resend-otp', { phone }),
-    forgotPassword: (email) => this.post('/auth/forgot-password', { email }),
+    forgotPassword: (email) => this.post('/auth/forgot-password', { email }, { timeout: 15000 }), // 15 seconds - email sending can take longer
     resetPassword: (resetData) => this.post('/auth/reset-password', resetData),
     refreshToken: () => this.post('/auth/refresh'),
   };
