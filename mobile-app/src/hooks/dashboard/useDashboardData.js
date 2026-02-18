@@ -116,28 +116,45 @@ export const useDashboardData = (user) => {
         setDashboardData(response.data);
       }
     } catch (error) {
-      logger.error('Error refreshing dashboard data:', error);
+      // Don't log 401 (unauthenticated) as error - e.g. token expired or not yet loaded
+      if (error.response?.status !== 401 && error.status !== 401) {
+        logger.error('Error refreshing dashboard data:', error);
+      }
+      if (error.response?.status === 401 || error.status === 401) {
+        setDashboardData({
+          leads: 0,
+          unreadLeads: 0,
+          responses: 0,
+          completedJobs: 0,
+          credits: 0,
+        });
+      }
     }
-    
+
     // Refresh user requests if customer (only active ones for dashboard)
     if (user?.role === 'Customer') {
       try {
         const response = await ApiService.get('/user-requests', { active_only: true });
         if (response.status === 'success') {
           // Filter out completed/closed requests
-          const activeRequests = response.data.filter(request => 
-            request.status !== 'completed' && 
-            request.status !== 'Closed' && 
-            request.status !== 'Bought' && 
+          const activeRequests = response.data.filter(request =>
+            request.status !== 'completed' &&
+            request.status !== 'Closed' &&
+            request.status !== 'Bought' &&
             request.status !== 'Unavailable'
           );
           setUserRequests(activeRequests);
         }
       } catch (error) {
-        logger.error('Error refreshing user requests:', error);
+        if (error.response?.status !== 401 && error.status !== 401) {
+          logger.error('Error refreshing user requests:', error);
+        }
+        if (error.response?.status === 401 || error.status === 401) {
+          setUserRequests([]);
+        }
       }
     }
-  }, [user?.role, loadUserRequests]);
+  }, [user?.role]);
 
   return {
     dashboardData,

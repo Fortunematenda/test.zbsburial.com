@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   TextInput,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card, Title, Paragraph, Avatar, Badge } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
@@ -18,6 +19,8 @@ import * as SecureStore from 'expo-secure-store';
 import ApiService from '../../services/ApiService';
 import Toast from 'react-native-toast-message';
 import logger from '../../utils/logger';
+
+const TAB_BAR_HEIGHT = 60;
 
 const ChatScreen = ({ navigation, route }) => {
   const [chats, setChats] = useState([]);
@@ -28,6 +31,7 @@ const ChatScreen = ({ navigation, route }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const leadId = route?.params?.leadId; // Get leadId from route params if provided (only used for filtering, not auto-navigation)
   const isNavigatingFromNotification = useRef(false);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     loadInitialData();
@@ -257,7 +261,7 @@ const ChatScreen = ({ navigation, route }) => {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['top']}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#8B5CF6" />
           <Text style={styles.loadingText}>Loading chats...</Text>
@@ -266,8 +270,10 @@ const ChatScreen = ({ navigation, route }) => {
     );
   }
 
+  const listBottomPadding = Math.max(insets.bottom, 12) + TAB_BAR_HEIGHT;
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar barStyle="light-content" backgroundColor="#8B5CF6" />
       
       {/* Header */}
@@ -320,7 +326,7 @@ const ChatScreen = ({ navigation, route }) => {
           data={filteredChats}
           renderItem={renderChatItem}
           keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
-          contentContainerStyle={styles.listContainer}
+          contentContainerStyle={[styles.listContainer, { paddingBottom: listBottomPadding }]}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

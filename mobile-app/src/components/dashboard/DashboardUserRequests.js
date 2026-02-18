@@ -51,9 +51,9 @@ const DashboardUserRequests = ({
       <View style={customStyles.requestsSection}>
         <Text style={customStyles.sectionTitle}>Your requests</Text>
         
-        {userRequests.map((request) => (
+        {userRequests.map((request, index) => (
           <TouchableOpacity 
-            key={request.id} 
+            key={`request-${request.id ?? request.lead_id ?? index}-${index}`} 
             style={customStyles.requestCard}
             onPress={() => {
               const leadId = request.id || request.lead_id;

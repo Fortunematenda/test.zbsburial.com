@@ -158,7 +158,9 @@ export const useDashboard = () => {
             try {
               await loadUserRequests();
             } catch (error) {
-              logger.error('Error refreshing user requests:', error);
+              if (error.response?.status !== 401 && error.status !== -1) {
+                logger.error('Error refreshing user requests:', error);
+              }
             }
           }
         };
@@ -171,8 +173,12 @@ export const useDashboard = () => {
   // Refresh dashboard (manual refresh)
   const refreshDashboard = useCallback(async () => {
     await loadUserData();
+    const authToken = await SecureStore.getItemAsync('auth_token');
+    if (!authToken) {
+      return;
+    }
     await refreshDashboardData();
-    
+
     // Refresh user requests if customer
     if (user?.role === 'Customer') {
       await loadUserRequests();

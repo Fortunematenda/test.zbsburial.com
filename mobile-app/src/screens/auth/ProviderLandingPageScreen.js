@@ -257,9 +257,9 @@ const ProviderLandingPageScreen = ({ navigation }) => {
           ]}
           pointerEvents="none"
         >
-          {stars.map((star) => (
+          {stars.map((star, index) => (
             <View
-              key={star.id}
+              key={`star-${star.id}-${index}`}
               style={[
                 styles.star,
                 {
