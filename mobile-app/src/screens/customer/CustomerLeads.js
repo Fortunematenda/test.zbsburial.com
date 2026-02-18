@@ -179,7 +179,7 @@ const CustomerLeads = ({ navigation }) => {
       <FlatList
         data={filteredLeads}
         renderItem={renderLead}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => `lead-${item.id}-${index}`}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

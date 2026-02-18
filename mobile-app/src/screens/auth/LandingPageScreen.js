@@ -709,11 +709,11 @@ const LandingPageScreen = ({ navigation }) => {
                   keyboardShouldPersistTaps="handled"
                   bounces={false}
                 >
-                  {serviceSuggestions.map((service) => {
+                  {serviceSuggestions.map((service, index) => {
                     const isSelected = serviceId === service.id;
                     return (
                       <TouchableOpacity
-                        key={service.id}
+                        key={`service-${service.id}-${index}`}
                         style={[
                           styles.suggestionItem,
                           isSelected && styles.suggestionItemSelected,

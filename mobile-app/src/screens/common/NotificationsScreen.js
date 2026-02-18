@@ -8,9 +8,9 @@ import {
   ActivityIndicator,
   RefreshControl,
   Alert,
-  SafeAreaView,
   StatusBar,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation, CommonActions } from '@react-navigation/native';
 import ApiService from '../../services/ApiService';
@@ -366,7 +366,7 @@ const NotificationsScreen = ({ navigation: propNavigation }) => {
       <FlatList
         data={notifications}
         renderItem={renderNotification}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => `notification-${item.id}-${index}`}
         contentContainerStyle={
           notifications.length === 0 ? styles.emptyList : styles.list
         }

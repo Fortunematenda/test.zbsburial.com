@@ -112,9 +112,9 @@ const DashboardSearchModal = ({
                     {searchResults.requests && searchResults.requests.length > 0 && (
                       <View style={customStyles.searchSection}>
                         <Text style={customStyles.searchSectionTitle}>Requests ({searchResults.requests.length})</Text>
-                        {searchResults.requests.map((item) => (
+                        {searchResults.requests.map((item, idx) => (
                           <TouchableOpacity
-                            key={item.id}
+                            key={`request-${item.id}-${idx}`}
                             style={customStyles.searchResultItem}
                             onPress={() => onNavigateToResult({ ...item, type: 'request' })}
                           >
@@ -158,9 +158,9 @@ const DashboardSearchModal = ({
                     {searchResults.services && searchResults.services.length > 0 && (
                       <View style={customStyles.searchSection}>
                         <Text style={customStyles.searchSectionTitle}>Services ({searchResults.services.length})</Text>
-                        {searchResults.services.map((item) => (
+                        {searchResults.services.map((item, idx) => (
                           <TouchableOpacity
-                            key={item.id}
+                            key={`service-${item.id}-${idx}`}
                             style={customStyles.searchResultItem}
                             onPress={() => onNavigateToResult({ ...item, type: 'service' })}
                           >
@@ -182,9 +182,9 @@ const DashboardSearchModal = ({
                     {searchResults.leads && searchResults.leads.length > 0 && (
                       <View style={customStyles.searchSection}>
                         <Text style={customStyles.searchSectionTitle}>Available Leads ({searchResults.leads.length})</Text>
-                        {searchResults.leads.map((item) => (
+                        {searchResults.leads.map((item, idx) => (
                           <TouchableOpacity
-                            key={item.id}
+                            key={`lead-${item.id}-${idx}`}
                             style={customStyles.searchResultItem}
                             onPress={() => onNavigateToResult({ ...item, type: 'lead' })}
                           >
@@ -209,9 +209,9 @@ const DashboardSearchModal = ({
                     {searchResults.users && searchResults.users.length > 0 && (
                       <View style={customStyles.searchSection}>
                         <Text style={customStyles.searchSectionTitle}>Providers ({searchResults.users.length})</Text>
-                        {searchResults.users.map((item) => (
+                        {searchResults.users.map((item, idx) => (
                           <TouchableOpacity
-                            key={item.id}
+                            key={`user-${item.id}-${idx}`}
                             style={customStyles.searchResultItem}
                             onPress={() => onNavigateToResult({ ...item, type: 'user' })}
                           >

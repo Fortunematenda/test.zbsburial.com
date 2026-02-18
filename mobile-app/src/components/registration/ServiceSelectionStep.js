@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Modal, FlatList, SafeAreaView, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Modal, FlatList, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, Button, Card } from 'react-native-paper';
 
 /**

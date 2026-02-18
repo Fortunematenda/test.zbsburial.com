@@ -5,13 +5,13 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
   StatusBar,
   Alert,
   ActivityIndicator,
   Modal,
   FlatList,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import ApiService from '../../services/ApiService';
@@ -275,7 +275,7 @@ const EditServicesScreen = ({ navigation, onRefreshUserData }) => {
             
             <FlatList
               data={getAvailableServices()}
-              keyExtractor={(item) => item.id.toString()}
+              keyExtractor={(item, index) => `service-${item.id}-${index}`}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.modalServiceItem}

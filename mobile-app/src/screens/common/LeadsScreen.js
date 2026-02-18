@@ -4,12 +4,12 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  SafeAreaView,
   StatusBar,
   RefreshControl,
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useLeads } from '../../hooks/leads/useLeads';
 import LeadCard from '../../components/leads/LeadCard';
@@ -142,9 +142,9 @@ const LeadsScreen = ({ navigation }) => {
             }
           >
             {filteredLeads.length > 0 ? (
-              filteredLeads.map((lead) => (
+              filteredLeads.map((lead, index) => (
                 <LeadCard 
-                  key={lead.id} 
+                  key={`lead-${lead.id}-${index}`} 
                   lead={lead}
                   navigation={navigation}
                   unlockingLeadId={unlockingLeadId}
